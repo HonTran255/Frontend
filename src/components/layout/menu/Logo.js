@@ -12,9 +12,9 @@ const Logo = ({ noBackground = false }) => (
                         : 'bg-primary text-white'
                 }`}
             >
-                Dunne
+                A-Z
             </span>
-            Figure
+            figure
         </h1>
     </div>
 );

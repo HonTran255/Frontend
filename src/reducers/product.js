@@ -4,15 +4,11 @@ const initialState = {
 };
 
 const productReducer = createSlice({
-    name: 'user',
+    name: 'product',
     initialState, // Define initial state
     reducers: {
-      addProduct: (state, action) => {
-        const product = action.payload;
-        return {
-            ...state,
-            product: product,
-        };
+      addProduct: (state, {payload}) => {
+        state.product=payload;
       }
 
     },

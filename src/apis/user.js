@@ -1,6 +1,8 @@
 import { refreshTokenApi, getToken } from './auth';
+import jwt from "jwt-decode";
 const API = 'http://localhost:8000/api';
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
+
 
 //user
 export const getUser = (userId) => {
@@ -38,7 +40,7 @@ export const listUserForAdmin = (userId, token, filter) => {
 export const getUserProfile = async (userId, token) => {
     //user validate
     const { refreshToken, _id, role } = getToken();
-    const decoded = jwt.decode(token);
+    const decoded = jwt(token);
     const timeout = (decoded.exp - 60) * 1000 - Date.now().valueOf();
     setTimeout(() => refreshTokenApi(refreshToken, _id, role), timeout);
 

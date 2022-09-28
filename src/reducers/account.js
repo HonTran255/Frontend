@@ -1,7 +1,6 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 
-
 const initialState = {
     user: {},
 };
@@ -10,22 +9,15 @@ const accountReducer = createSlice({
     initialState, // Define initial state
     reducers: {
       // Define reducers
-      addAccount: (state, action) => {
-        const user = action.payload;
-        return {
-            ...state,
-            user: user,
-        };
+      addAccount: (state, {payload}) => {
+        state.user = payload;
       },
       updateAvatar: (state, action) => {
-        const newUser = state.user;
-        newUser.avatar = action.payload;
-        return {
-            ...state,
-            user: newUser,
-        };
+        state.user = action.payload;
       }
     },
 });
-export const { addAccount, updateAvatar } = accountReducer.actions
+
+
+export const { addAccount, updateAvatar } = accountReducer.actions;
 export default accountReducer.reducer;

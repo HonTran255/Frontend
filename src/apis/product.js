@@ -146,18 +146,18 @@ export const activeProduct = (userId, token, value, productId) => {
 };
 
 //crud
-// export const createProduct = (userId, token, product, storeId) => {
-//     return fetch(`${API}/product/create/${storeId}/${userId}`, {
-//         method: 'POST',
-//         headers: {
-//             Accept: 'application/json',
-//             Authorization: `Bearer ${token}`,
-//         },
-//         body: product,
-//     })
-//         .then((res) => res.json())
-//         .catch((error) => console.log(error));
-// };
+export const createProduct = (userId, token, product) => {
+    return fetch(`${API}/product/create/${userId}`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: product,
+    })
+        .then((res) => res.json())
+        .catch((error) => console.log(error));
+};
 
 // export const updateProduct = (userId, token, product, productId, storeId) => {
 //     return fetch(`${API}/product/update/${productId}/${storeId}/${userId}`, {
