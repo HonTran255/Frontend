@@ -1,7 +1,7 @@
 import MainLayout from '../../components/layout/MainLayout';
 import ListCategories from '../../components/list/ListCategories';
 import Banner from '../../components/ui/Banner';
-// import ListBestSellerProduct from '../../components/list/ListBestSellerProduct';
+import ListBestSellerProduct from '../../components/list/ListBestSellerProduct';
 
 const HomePage = () => {
     return (
@@ -10,12 +10,12 @@ const HomePage = () => {
                 <Banner/>
             </div>
             <div className="mb-4">
-                <ListCategories heading="Khám phá" />
+                <ListCategories heading="Danh mục" />
             </div>
 
-            {/* <div className="mb-4">
+            <div className="mb-4">
                 <ListBestSellerProduct heading="Best Seller" />
-            </div> */}
+            </div>
 
         </MainLayout>
     );

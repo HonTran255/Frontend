@@ -1,8 +1,7 @@
-import StoreCarouselUpload from './uploadButton/StoreCarouselUpload';
+
 const IMG = process.env.REACT_APP_STATIC_URL;
 
 const Carousel = ({
-    storeId = '',
     listImages = [],
     alt = 'carousel',
     isEditable = false,
@@ -40,13 +39,6 @@ const Carousel = ({
                                 className="d-block w-100 cus-carousel-img"
                                 alt={alt}
                             />
-
-                            {isEditable == 'store' && (
-                                <StoreCarouselUpload
-                                    storeId={storeId}
-                                    index={index}
-                                />
-                            )}
                         </div>
                     </div>
                 ))}

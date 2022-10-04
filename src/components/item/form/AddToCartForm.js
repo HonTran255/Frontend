@@ -5,7 +5,6 @@ import Loading from '../../ui/Loading';
 import Error from '../../ui/Error';
 import Success from '../../ui/Success';
 import ConfirmDialog from '../../ui/ConfirmDialog';
-import StyleValueSelector from '../../seletor/StyleValueSelector';
 import useUpdateDispatch from '../../../hooks/useUpdateDispatch';
 
 const AddToCartForm = ({ product = {} }) => {
@@ -20,38 +19,8 @@ const AddToCartForm = ({ product = {} }) => {
 
     useEffect(() => {
         let defaultList = [];
-
-        product.styleValueIds &&
-            product.styleValueIds.forEach((value) => {
-                let flag = true;
-                defaultList.forEach((list) => {
-                    if (value.styleId._id === list[0].styleId._id) {
-                        list.push(value);
-                        flag = false;
-                    }
-
-                    list.sort((a, b) => {
-                        const nameA = a.name.toUpperCase();
-                        const nameB = b.name.toUpperCase();
-                        if (nameA < nameB) return -1;
-                        if (nameA > nameB) return 1;
-                        return 0;
-                    });
-                });
-
-                if (flag) defaultList.push([value]);
-            });
-
-        const defaultStyleValues = defaultList.map((list) => list[0]);
-        const defaultStyleValueIds = defaultStyleValues
-            .map((value) => value._id)
-            .join('|');
-
         setCartItem({
-            storeId: product.storeId && product.storeId._id,
             productId: product._id,
-            styleValueIds: defaultStyleValueIds,
-            defaultStyleValues: defaultStyleValues,
             count: 1,
         });
     }, [product]);
@@ -109,14 +78,6 @@ const AddToCartForm = ({ product = {} }) => {
             )}
 
             <form className="add-to-cart-form row">
-                <div className="col-12">
-                    <StyleValueSelector
-                        listValues={product.styleValueIds}
-                        isEditable={true}
-                        defaultValue={cartItem.defaultStyleValues}
-                        onSet={(values) => handleSet(values)}
-                    />
-                </div>
 
                 {error && (
                     <div className="col-12">

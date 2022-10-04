@@ -1,6 +1,4 @@
 import Paragraph from '../ui/Paragraph';
-import PhoneActiveButton from '../button/PhoneActiveButton';
-import EmailActiveButton from '../button/EmailActiveButton';
 import UserEditProfileItem from '../item/UserEditProfileItem';
 import UserEditPasswordItem from '../item/UserEditPasswordItem';
 
@@ -24,15 +22,6 @@ const UserProfileInfo = ({ user = {}, isEditable = false }) => (
                     <div className="col-sm-6">
                         <Paragraph label="Email" value={user.email || '-'} />
                     </div>
-
-                    <div className="col-sm-6 mt-2 ps-4">
-                        <EmailActiveButton
-                            email={user.email}
-                            isEmailActive={user.isEmailActive}
-                            googleId={user.googleId}
-                            facebookId={user.facebookId}
-                        />
-                    </div>
                 </>
             )}
 
@@ -46,12 +35,6 @@ const UserProfileInfo = ({ user = {}, isEditable = false }) => (
                         <Paragraph label="Phone" value={user.phone || '-'} />
                     </div>
 
-                    <div className="col-sm-6 mt-2">
-                        <PhoneActiveButton
-                            phone={user.phone}
-                            isPhoneActive={user.isPhoneActive}
-                        />
-                    </div>
                 </>
             )}
 

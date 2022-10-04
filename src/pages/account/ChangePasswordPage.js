@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useParams, Redirect } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import { changePassword } from '../../apis/auth';
 import Loading from '../../components/ui/Loading';
 import Error from '../../components/ui/Error';
 import Success from '../../components/ui/Success';
 import Logo from '../../components/layout/menu/Logo';
 import Input from '../../components/ui/Input';
-import { regexTest } from '../../helper/test';
+import { regexTest } from '../../helpers/test';
 
 const ChangePasswordPage = (props) => {
     const [isloading, setIsLoading] = useState(false);
@@ -83,7 +83,7 @@ const ChangePasswordPage = (props) => {
             >
                 {isloading && <Loading />}
                 {redirect && (
-                    <Redirect
+                    <Navigate
                         to={{
                             pathname: redirect,
                             state: { from: props.location },

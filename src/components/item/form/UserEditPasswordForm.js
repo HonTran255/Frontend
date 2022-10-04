@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { getToken } from '../../../apis/auth';
 import { updatePassword } from '../../../apis/user';
-import { regexTest } from '../../../helper/test';
+import { regexTest } from '../../../helpers/test';
 import Input from '../../ui/Input';
 import Loading from '../../ui/Loading';
 import Error from '../../ui/Error';

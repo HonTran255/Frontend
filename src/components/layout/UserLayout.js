@@ -1,8 +1,7 @@
 import MainLayout from './MainLayout';
-import UserNav from './menu/UserNav';
+// import UserNav from './menu/UserNav';
 import Cover from '../image/Cover';
 import Avatar from '../image/Avatar';
-import UserLevelInfo from '../info/UserLevelInfo';
 
 const UserLayout = ({ user = {}, children = null }) => (
     <MainLayout>
@@ -23,13 +22,10 @@ const UserLayout = ({ user = {}, children = null }) => (
                         alt={user.firstname + ' ' + user.lastname}
                     />
                 </div>
-                <div className="level-group-absolute level-group-absolute--small res-hide">
-                    <UserLevelInfo user={user} />
-                </div>
             </div>
         </div>
 
-        <UserNav user={user} />
+        {/* <UserNav user={user} /> */}
 
         <div className="user-page-main mt-3">{children}</div>
     </MainLayout>

@@ -87,7 +87,7 @@ const FollowingProductsCollection = (props) => {
                 </div>
             </div>
 
-            {pagination.size != 0 && (
+            {pagination.size !== 0 && (
                 <Pagination
                     pagination={pagination}
                     onChangePage={handleChangePage}

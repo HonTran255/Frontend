@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getToken } from '../../../apis/auth';
 import { updateCategory, getCategoryById } from '../../../apis/category';
-import { regexTest } from '../../../helper/test';
+import { regexTest } from '../../../helpers/test';
 import Input from '../../ui/Input';
 import InputFile from '../../ui/InputFile';
 import Loading from '../../ui/Loading';
 import Error from '../../ui/Error';
 import Success from '../../ui/Success';
 import ConfirmDialog from '../../ui/ConfirmDialog';
-import CategorySelector from '../../seletor/CategorySelector';
+import CategorySelector from '../../selector/CategorySelector';
 
 const AdminEditCategoryForm = ({ categoryId = '' }) => {
     const [isloading, setIsLoading] = useState(false);

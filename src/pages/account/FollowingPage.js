@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
 import useToggle from '../../hooks/useToggle';
 import AccountLayout from '../../components/layout/AccountLayout';
-import FollowingProductsCollection from '../../components/collection/FollowingProductsCollection';
-import FollowingStoresCollection from '../../components/collection/FollowingStoreCollection';
+import FollowingProductsCollection from '../../components/collection/FollowingProductCollection';
+
 
 const FollowingPage = (props) => {
     const user = useSelector((state) => state.account.user);
@@ -25,27 +25,8 @@ const FollowingPage = (props) => {
                         Following products
                     </small>
                 </div>
-
-                <div className="position-relative d-inline-block">
-                    <button
-                        type="button"
-                        className={`btn ${
-                            !flag ? 'btn-pink' : 'btn-outline-pink'
-                        } btn-lg ripple cus-tooltip`}
-                        onClick={() => toggleFlag(false)}
-                    >
-                        <i className="fas fa-store"></i>
-                    </button>
-
-                    <small className="cus-tooltip-msg">Following stores</small>
-                </div>
             </div>
-
-            {flag ? (
-                <FollowingProductsCollection />
-            ) : (
-                <FollowingStoresCollection />
-            )}
+        <FollowingProductsCollection />
         </AccountLayout>
     );
 };

@@ -53,7 +53,7 @@ export const checkFollowingProduct = (userId, token, productId) => {
 };
 
 export const listFollowingProducts = (userId, token, filter) => {
-    const { search, sortBy, order, limit, page } = filter;
+    const { limit, page } = filter;
     return fetch(
         `${API}/following/products/${userId}?&limit=${limit}&page=${page}`,
         {

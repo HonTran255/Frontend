@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getToken } from '../../../apis/auth';
 import { updateAddress } from '../../../apis/user';
 import useUpdateDispatch from '../../../hooks/useUpdateDispatch';
-import { regexTest } from '../../../helper/test';
+import { regexTest } from '../../../helpers/test';
 import Input from '../../ui/Input';
 import Loading from '../../ui/Loading';
 import Error from '../../ui/Error';

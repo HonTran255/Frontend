@@ -13,7 +13,7 @@ const UserInit = ({ user, actions }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const { userId } = useParams();
+    const  userId  = useParams();
 
     const init = () => {
         setIsLoading(true);

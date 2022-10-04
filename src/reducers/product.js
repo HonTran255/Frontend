@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
-    product: {},
+    product: {
+    },
 };
 
 const productReducer = createSlice({
@@ -8,7 +9,7 @@ const productReducer = createSlice({
     initialState, // Define initial state
     reducers: {
       addProduct: (state, {payload}) => {
-        state.product=payload;
+        state.product = payload;
       }
 
     },

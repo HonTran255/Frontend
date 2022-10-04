@@ -8,7 +8,7 @@ import {addAccount} from '../reducers/account';
 
 const useUpdateDispatch = () => {
     const account = useSelector((state) => state.account.user);
-
+    const product = useSelector((state) => state.product.product);
     const user = useSelector((state) => state.user.user);
 
     const { _id, accessToken } = getToken();
@@ -41,14 +41,6 @@ const useUpdateDispatch = () => {
             }
 
             case 'user': {
-                // //get level
-                // try {
-                //     const res = await getUserLevel(data._id);
-                //     data.level = res.level;
-                // } catch {
-                //     data.level = user.level;
-                // }
-
                 //get count orders
                 try {
                     const res1 = await countOrder('Delivered', data._id, '');

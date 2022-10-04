@@ -1,4 +1,4 @@
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Navigate } from 'react-router-dom';
 import { getToken } from '../../apis/auth';
 
 const AdminRoute = ({ component: Page, ...rest }) => {
@@ -9,7 +9,7 @@ const AdminRoute = ({ component: Page, ...rest }) => {
                 getToken() && getToken().role === 'admin' ? (
                     <Page {...props} />
                 ) : (
-                    <Redirect
+                    <Navigate
                         to={{
                             pathname: '/',
                             state: { from: props.location },

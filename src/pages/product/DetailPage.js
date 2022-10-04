@@ -6,21 +6,19 @@ import {
     getNumberOfFollowersForProduct,
     checkFollowingProduct,
 } from '../../apis/follow';
-import { formatPrice } from '../../helper/formatPrice';
+import Carousel from '../../components/image/Carousel';
+import { formatPrice } from '../../helpers/formatPrice';
 import MainLayout from '../../components/layout/MainLayout';
 import Loading from '../../components/ui/Loading';
 import Error from '../../components/ui/Error';
-import Carousel from '../../components/image/Carousel';
 import StarRating from '../../components/label/StarRating';
 import FollowProductButton from '../../components/button/FollowProductButton';
 import AddToCartForm from '../../components/item/form/AddToCartForm';
-import Paragraph from '../../components/ui/Paragraph';
-import CategorySmallCard from '../../components/card/CategorySmallCard';
-import StoreSmallCard from '../../components/card/StoreSmallCard';
+// import Paragraph from '../../components/ui/Paragraph';
+// import CategorySmallCard from '../../components/card/CategorySmallCard';
 import ListBestSellerProducts from '../../components/list/ListBestSellerProduct';
-import ListProductsByStore from '../../components/list/ListProductsByStore';
 import SigninButton from '../../components/item/SigninItem';
-import ListReviews from '../../components/list/ListReviews';
+// import ListReviews from '../../components/list/ListReviews';
 
 const DetailPage = () => {
     const [isloading, setIsLoading] = useState(false);
@@ -35,12 +33,6 @@ const DetailPage = () => {
         getProduct(productId)
             .then(async (data) => {
                 if (data.error) setError(data.error);
-                else if (
-                    data.product &&
-                    data.product.storeId &&
-                    !data.product.storeId.isActive
-                )
-                    setError('This store is banned by GoodDeal!');
                 else {
                     const newProduct = data.product;
                     //get count followers
@@ -123,10 +115,6 @@ const DetailPage = () => {
                                 </div>
 
                                 <div className="mt-4">
-                                    {product.storeId &&
-                                        !product.storeId.isOpen && (
-                                            <Error msg="This store is closed, can' t order in this time!" />
-                                        )}
                                     {product.quantity <= 0 && (
                                         <Error msg="The product is sold out!" />
                                     )}
@@ -138,8 +126,7 @@ const DetailPage = () => {
                                         />
                                     )}
 
-                                    {product.storeId &&
-                                        product.storeId.isOpen &&
+                                    {
                                         product.quantity > 0 &&
                                         getToken() &&
                                         getToken().role === 'user' && (
@@ -163,7 +150,7 @@ const DetailPage = () => {
                                 </div>
                             </div>
 
-                            <div className="col-12">
+                            {/* <div className="col-12">
                                 <div className="container-fluid p-0">
                                     <div className="row res-flex-reverse-md">
                                         <div className="col-md-8 p-0">
@@ -187,21 +174,10 @@ const DetailPage = () => {
                                                 label="Description"
                                                 multiLine={true}
                                             />
-
-                                            <div className="mt-4 px-3 d-flex justify-content-right align-items-center">
-                                                <h5 className="m-0">
-                                                    Your seller:
-                                                </h5>
-                                                <span className="ms-2">
-                                                    <StoreSmallCard
-                                                        store={product.storeId}
-                                                    />
-                                                </span>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="col-12">
                                 {product.categoryId && (
@@ -209,20 +185,6 @@ const DetailPage = () => {
                                         <ListBestSellerProducts
                                             heading="Similar Products"
                                             categoryId={product.categoryId._id}
-                                        />
-                                    </div>
-                                )}
-
-                                {product.storeId && (
-                                    <div className="mt-4">
-                                        <ListProductsByStore
-                                            heading={`${
-                                                product.storeId &&
-                                                product.storeId.name
-                                                    ? product.storeId.name
-                                                    : 'Store'
-                                            }'s Other Products`}
-                                            storeId={product.storeId._id}
                                         />
                                     </div>
                                 )}

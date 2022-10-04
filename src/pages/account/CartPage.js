@@ -5,7 +5,6 @@ import MainLayout from '../../components/layout/MainLayout';
 import Loading from '../../components/ui/Loading';
 import Error from '../../components/ui/Error';
 import Success from '../../components/ui/Success';
-import StoreSmallCard from '../../components/card/StoreSmallCard';
 import ListCartItemsForm from '../../components/list/ListCartItemsForm';
 
 const CartPage = (props) => {
@@ -56,16 +55,6 @@ const CartPage = (props) => {
                                     className="accordion-header"
                                     id={`panelsStayOpen-heading-${index}`}
                                 >
-                                    <button
-                                        className="accordion-button btn"
-                                        type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target={`#panelsStayOpen-collapse-${index}`}
-                                        aria-expanded="true"
-                                        aria-controls={`panelsStayOpen-collapse-${index}`}
-                                    >
-                                        <StoreSmallCard store={cart.storeId} />
-                                    </button>
                                 </h2>
                                 <div
                                     id={`panelsStayOpen-collapse-${index}`}

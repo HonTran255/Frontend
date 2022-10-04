@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import useToggle from '../../hooks/useToggle';
 import AdminLayout from '../../components/layout/AdminLayout';
 import AdminCategoriesTable from '../../components/table/AdminCategoriesTable';
-import CategorySelector from '../../components/seletor/CategorySelector';
+import CategorySelector from '../../components/selector/CategorySelector';
 
 const CategoryPage = (props) => {
     const user = useSelector((state) => state.account.user);

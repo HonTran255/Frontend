@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getToken } from '../../../apis/auth';
 import { editReview } from '../../../apis/review';
-import { numberTest, regexTest } from '../../../helper/test';
+import { numberTest, regexTest } from '../../../helpers/test';
 import Loading from '../../ui/Loading';
 import Error from '../../ui/Error';
 import Success from '../../ui/Success';

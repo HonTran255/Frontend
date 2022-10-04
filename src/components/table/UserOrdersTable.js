@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getToken } from '../../apis/auth';
 import { listOrdersByUser } from '../../apis/order';
-import { formatPrice } from '../../helper/formatPrice';
-import { humanReadableDate } from '../../helper/humanReadable';
-import StoreSmallCard from '../card/StoreSmallCard';
+import { formatPrice } from '../../helpers/formatPrice';
+import { humanReadableDate } from '../../helpers/humanReadable';
 import Pagination from '../ui/Pagination';
 import Loading from '../ui/Loading';
 import Error from '../ui/Error';
@@ -222,12 +221,6 @@ const UserOrdersTable = ({ heading = true, status = '' }) => {
                                         VND
                                     </small>
                                 </td>
-                                <td
-                                    className="text-start ps-2"
-                                    style={{ maxWidth: '300px' }}
-                                >
-                                    <StoreSmallCard store={order.storeId} />
-                                </td>
                                 <td>
                                     {order.deliveryId && (
                                         <small>
@@ -273,7 +266,7 @@ const UserOrdersTable = ({ heading = true, status = '' }) => {
                 </table>
             </div>
 
-            {pagination.size != 0 && (
+            {pagination.size !== 0 && (
                 <Pagination
                     pagination={pagination}
                     onChangePage={handleChangePage}

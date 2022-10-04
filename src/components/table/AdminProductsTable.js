@@ -4,12 +4,11 @@ import {
     listProductsForAdmin,
     activeProduct as activeOrInactive,
 } from '../../apis/product';
-import { humanReadableDate } from '../../helper/humanReadable';
+import { humanReadableDate } from '../../helpers/humanReadable';
 import Pagination from '../ui/Pagination';
 import SearchInput from '../ui/SearchInput';
 import SortByButton from './sub/SortByButton';
 import ProductSmallCard from '../card/ProductSmallCard';
-import StoreSmallCard from '../card/StoreSmallCard';
 import ProductStatusLabel from '../label/ProductStatusLabel';
 import StarRating from '../label/StarRating';
 import Loading from '../ui/Loading';
@@ -175,17 +174,6 @@ const AdminProductsTable = ({ heading = true, isActive = true }) => {
                                 <SortByButton
                                     currentOrder={filter.order}
                                     currentSortBy={filter.sortBy}
-                                    title="Store"
-                                    sortBy="storeId"
-                                    onSet={(order, sortBy) =>
-                                        handleSetSortBy(order, sortBy)
-                                    }
-                                />
-                            </th>
-                            <th scope="col">
-                                <SortByButton
-                                    currentOrder={filter.order}
-                                    currentSortBy={filter.sortBy}
                                     title="Rating"
                                     sortBy="rating"
                                     onSet={(order, sortBy) =>
@@ -233,9 +221,6 @@ const AdminProductsTable = ({ heading = true, isActive = true }) => {
                                     style={{ whiteSpace: 'normal' }}
                                 >
                                     <ProductSmallCard product={product} />
-                                </td>
-                                <td className="text-start">
-                                    <StoreSmallCard store={product.storeId} />
                                 </td>
                                 <td>
                                     <small>

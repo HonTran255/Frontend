@@ -7,8 +7,8 @@ import {
     deleteFromCart,
     updateCartItem,
 } from '../../apis/cart';
-import { totalProducts } from '../../helper/total';
-import { formatPrice } from '../../helper/formatPrice';
+import { totalProducts } from '../../helpers/total';
+import { formatPrice } from '../../helpers/formatPrice';
 import useUpdateDispatch from '../../hooks/useUpdateDispatch';
 import useToggle from '../../hooks/useToggle';
 import Loading from '../ui/Loading';
@@ -16,7 +16,6 @@ import Error from '../ui/Error';
 import Success from '../ui/Success';
 import ConfirmDialog from '../ui/ConfirmDialog';
 import DropDownMenu from '../ui/DropDownMenu';
-import UserLevelLabel from '../label/UserLevelLabel';
 import CheckoutForm from '../item/form/CheckoutForm';
 
 const IMG = process.env.REACT_APP_STATIC_URL;
@@ -328,9 +327,6 @@ const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
                             </div>
 
                             <div className="me-4">
-                                <small>
-                                    <UserLevelLabel level={level} />
-                                </small>
 
                                 <h4 className="text-primary fs-5">
                                     {formatPrice(totals.amountFromUser1)} VND

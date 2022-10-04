@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getToken } from '../../apis/auth';
 import { listUserForAdmin } from '../../apis/user';
-import { humanReadableDate } from '../../helper/humanReadable';
+import { humanReadableDate } from '../../helpers/humanReadable';
 import Pagination from '../ui/Pagination';
 import SearchInput from '../ui/SearchInput';
 import SortByButton from './sub/SortByButton';
@@ -116,17 +116,6 @@ const AdminUsersTable = ({ heading = 'Users in the system' }) => {
                                 <SortByButton
                                     currentOrder={filter.order}
                                     currentSortBy={filter.sortBy}
-                                    title="Point"
-                                    sortBy="point"
-                                    onSet={(order, sortBy) =>
-                                        handleSetSortBy(order, sortBy)
-                                    }
-                                />
-                            </th>
-                            <th scope="col">
-                                <SortByButton
-                                    currentOrder={filter.order}
-                                    currentSortBy={filter.sortBy}
                                     title="Id card"
                                     sortBy="id_card"
                                     onSet={(order, sortBy) =>
@@ -179,9 +168,6 @@ const AdminUsersTable = ({ heading = 'Users in the system' }) => {
                                 </th>
                                 <td className="text-start">
                                     <UserSmallCard user={user} />
-                                </td>
-                                <td>
-                                    <small>{user.point}</small>
                                 </td>
                                 <td>
                                     <small>{user.id_card || '-'}</small>

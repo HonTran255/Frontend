@@ -1,29 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getToken } from '../../../apis/auth';
 import { createOrder } from '../../../apis/order';
 import { listActiveDeliveries } from '../../../apis/delivery';
-import { getStoreLevel } from '../../../apis/level';
-import { getCommissionByStore } from '../../../apis/commission';
 import Loading from '../../ui/Loading';
 import Error from '../../ui/Error';
 import ConfirmDialog from '../../ui/ConfirmDialog';
 import UserAddAddressItem from '../../item/UserAddAddressItem';
 import useUpdateDispatch from '../../../hooks/useUpdateDispatch';
-import { regexTest } from '../../../helper/test';
-import { convertVNDtoUSD } from '../../../helper/formatPrice';
+import { regexTest } from '../../../helpers/test';
+import { convertVNDtoUSD } from '../../../helpers/formatPrice';
 import {
     totalDelivery,
     totalProducts,
-    totalCommission,
-} from '../../../helper/total';
-import { formatPrice } from '../../../helper/formatPrice';
+} from '../../../helpers/total';
+import { formatPrice } from '../../../helpers/formatPrice';
 import Logo from '../../layout/menu/Logo';
 import Input from '../../ui/Input';
 import DropDownMenu from '../../ui/DropDownMenu';
-import UserLevelLabel from '../../label/UserLevelLabel';
-import { PayPalButton } from 'react-paypal-button-v2';
+// import { PayPalButton } from 'react-paypal-button-v2';
 
 const CLIENT_ID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
 const CheckoutForm = ({
@@ -37,7 +33,7 @@ const CheckoutForm = ({
     const [error, setError] = useState('');
 
     const [updateDispatch] = useUpdateDispatch();
-    const history = useHistory();
+    const history = useNavigate();
 
     const {
         addresses,
@@ -50,8 +46,6 @@ const CheckoutForm = ({
     const init = async () => {
         try {
             const res = await listActiveDeliveries();
-            const res1 = await getStoreLevel(storeId);
-            const res2 = await getCommissionByStore(storeId);
 
             setDeliveries(res.deliveries);
             const { deliveryPrice, amountFromUser2 } = totalDelivery(
@@ -60,11 +54,6 @@ const CheckoutForm = ({
             );
             const { totalPrice, totalPromotionalPrice, amountFromUser1 } =
                 totalProducts(items, userLevel);
-            const { amountFromStore, amountToStore } = totalCommission(
-                items,
-                res1.level,
-                res2.commission,
-            );
 
             setOrder({
                 phone,
@@ -79,10 +68,7 @@ const CheckoutForm = ({
                 totalPromotionalPrice,
                 amountFromUser1,
                 amountFromUser: amountFromUser1 + amountFromUser2,
-                amountFromStore,
-                amountToStore,
-                commissionId: res2.commission._id,
-                amountToGD: amountFromUser1 + amountFromUser2 - amountToStore,
+                amountToGD: amountFromUser1 + amountFromUser2,
             });
         } catch (e) {
             setError('Server Error');
@@ -91,7 +77,7 @@ const CheckoutForm = ({
 
     useEffect(() => {
         init();
-    }, [cartId, userId, storeId, items, addresses, phone, userLevel]);
+    }, [cartId, userId, items, addresses, phone]);
 
     const handleChange = (name, isValidName, value) => {
         setOrder({
@@ -118,8 +104,6 @@ const CheckoutForm = ({
             address,
             phone,
             amountFromUser,
-            amountFromStore,
-            amountToStore,
             amountToGD,
         } = order;
 
@@ -130,8 +114,6 @@ const CheckoutForm = ({
             !address ||
             !phone ||
             !amountFromUser ||
-            !amountFromStore ||
-            !amountToStore ||
             !amountToGD
         ) {
             setOrder({
@@ -153,10 +135,7 @@ const CheckoutForm = ({
             phone,
             address,
             deliveryId,
-            commissionId,
             amountFromUser,
-            amountFromStore,
-            amountToStore,
             amountToGD,
         } = order;
 
@@ -164,10 +143,7 @@ const CheckoutForm = ({
             phone,
             address,
             deliveryId,
-            commissionId,
             amountFromUser,
-            amountFromStore,
-            amountToStore,
             amountToGD,
             isPaidBefore: false,
         };
@@ -196,24 +172,18 @@ const CheckoutForm = ({
         const {
             cartId,
             deliveryId,
-            commissionId,
             address,
             phone,
             amountFromUser,
-            amountFromStore,
-            amountToStore,
             amountToGD,
         } = order;
 
         if (
             !cartId ||
             !deliveryId ||
-            !commissionId ||
             !address ||
             !phone ||
             !amountFromUser ||
-            !amountFromStore ||
-            !amountToStore ||
             !amountToGD
         ) {
             setOrder({
@@ -252,10 +222,7 @@ const CheckoutForm = ({
                 phone,
                 address,
                 deliveryId,
-                commissionId,
                 amountFromUser,
-                amountFromStore,
-                amountToStore,
                 amountToGD,
             } = order;
 
@@ -263,10 +230,7 @@ const CheckoutForm = ({
                 phone,
                 address,
                 deliveryId,
-                commissionId,
                 amountFromUser,
-                amountFromStore,
-                amountToStore,
                 amountToGD,
                 isPaidBefore: true,
             };
@@ -475,9 +439,6 @@ const CheckoutForm = ({
                                         </h4>
                                     </dd>
                                     <dd className="col-sm-6">
-                                        <small className="res-hide">
-                                            <UserLevelLabel level={userLevel} />
-                                        </small>
 
                                         <h4 className="text-primary fs-5">
                                             {formatPrice(order.amountFromUser1)}{' '}
@@ -502,10 +463,6 @@ const CheckoutForm = ({
                                         </h4>
                                     </dd>
                                     <dd className="col-sm-6">
-                                        <small className="res-hide">
-                                            <UserLevelLabel level={userLevel} />
-                                        </small>
-
                                         <h4 className="text-primary fs-5">
                                             {formatPrice(order.amountFromUser2)}{' '}
                                             VND
@@ -536,7 +493,7 @@ const CheckoutForm = ({
                             >
                                 Only order
                             </button>
-
+{/* 
                             <div style={{ position: 'relative', zIndex: '1' }}>
                                 <PayPalButton
                                     options={{
@@ -557,7 +514,7 @@ const CheckoutForm = ({
                                     }
                                     onCancel={() => setIsLoading(false)}
                                 />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
