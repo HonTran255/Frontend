@@ -24,10 +24,10 @@ import DropDownMenu from '../../ui/DropDownMenu';
 const CLIENT_ID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
 const CheckoutForm = ({
     cartId = '',
-    storeId = '',
     userId = '',
     items = {},
 }) => {
+
     const [isloading, setIsLoading] = useState(false);
     const [isConfirming, setIsConfirming] = useState(false);
     const [error, setError] = useState('');
@@ -38,37 +38,25 @@ const CheckoutForm = ({
     const {
         addresses,
         phone,
-        level: userLevel,
     } = useSelector((state) => state.account.user);
-    const [deliveries, setDeliveries] = useState([]);
+  
     const [order, setOrder] = useState({});
 
     const init = async () => {
         try {
-            const res = await listActiveDeliveries();
 
-            setDeliveries(res.deliveries);
-            const { deliveryPrice, amountFromUser2 } = totalDelivery(
-                res.deliveries[0],
-                userLevel,
-            );
-            const { totalPrice, totalPromotionalPrice, amountFromUser1 } =
-                totalProducts(items, userLevel);
 
+            const { totalPrice, totalPromotionalPrice } =
+                totalProducts(items);
+            const amount = totalPromotionalPrice;
             setOrder({
                 phone,
                 address: addresses[0],
                 isValidPhone: true,
                 cartId,
-                delivery: res.deliveries[0],
-                deliveryId: res.deliveries[0]._id,
-                deliveryPrice,
-                amountFromUser2,
                 totalPrice,
                 totalPromotionalPrice,
-                amountFromUser1,
-                amountFromUser: amountFromUser1 + amountFromUser2,
-                amountToGD: amountFromUser1 + amountFromUser2,
+                amount
             });
         } catch (e) {
             setError('Server Error');
@@ -100,21 +88,17 @@ const CheckoutForm = ({
         const {
             cartId,
             deliveryId,
-            commissionId,
             address,
             phone,
-            amountFromUser,
-            amountToGD,
+            amount
         } = order;
 
         if (
             !cartId ||
             !deliveryId ||
-            !commissionId ||
             !address ||
             !phone ||
-            !amountFromUser ||
-            !amountToGD
+            !amount
         ) {
             setOrder({
                 ...order,
@@ -135,16 +119,14 @@ const CheckoutForm = ({
             phone,
             address,
             deliveryId,
-            amountFromUser,
-            amountToGD,
+            amount
         } = order;
 
         const orderBody = {
             phone,
             address,
             deliveryId,
-            amountFromUser,
-            amountToGD,
+            amount,
             isPaidBefore: false,
         };
 
@@ -155,7 +137,7 @@ const CheckoutForm = ({
                 if (data.error) setError(data.error);
                 else {
                     updateDispatch('account', data.user);
-                    history.push('/account/purchase');
+                    history('/account/purchase');
                 }
                 setIsLoading(false);
             })
@@ -174,8 +156,7 @@ const CheckoutForm = ({
             deliveryId,
             address,
             phone,
-            amountFromUser,
-            amountToGD,
+            amount
         } = order;
 
         if (
@@ -183,8 +164,7 @@ const CheckoutForm = ({
             !deliveryId ||
             !address ||
             !phone ||
-            !amountFromUser ||
-            !amountToGD
+            !amount
         ) {
             setOrder({
                 ...order,
@@ -200,7 +180,7 @@ const CheckoutForm = ({
                     {
                         amount: {
                             currency_code: 'USD',
-                            value: convertVNDtoUSD(order.amountFromUser),
+                            value: convertVNDtoUSD(order.amount),
                         },
                     },
                 ],
@@ -222,16 +202,14 @@ const CheckoutForm = ({
                 phone,
                 address,
                 deliveryId,
-                amountFromUser,
-                amountToGD,
+                amount
             } = order;
 
             const orderBody = {
                 phone,
                 address,
                 deliveryId,
-                amountFromUser,
-                amountToGD,
+                amount,
                 isPaidBefore: true,
             };
 
@@ -273,7 +251,7 @@ const CheckoutForm = ({
             >
                 <div className="col-12 bg-primary p-3">
                     <Logo />
-                    <p className="text-white fw-light">Proceed to checkout</p>
+                    <p className="text-white fw-light">Đặt hàng</p>
                 </div>
 
                 <div className="col-xl-8 col-md-6">
@@ -285,7 +263,7 @@ const CheckoutForm = ({
                                     label="Phone"
                                     value={order.phone}
                                     isValid={order.isValidPhone}
-                                    feedback="Please provide a valid phone number."
+                                    feedback="Hãy nhập số điện thoại."
                                     validator="phone"
                                     onChange={(value) =>
                                         handleChange(
@@ -318,7 +296,7 @@ const CheckoutForm = ({
                                     </button>
                                 </div>
                                 <small className="cus-tooltip-msg">
-                                    Use registered phone number
+                                    Sử dụng số điện thoại đã đăng ký
                                 </small>
                             </div>
                         </div>
@@ -366,53 +344,14 @@ const CheckoutForm = ({
                                     />
                                 </div>
                                 <small className="cus-tooltip-msg">
-                                    Add your address
+                                    Thêm địa chỉ
                                 </small>
                             </div>
                         </div>
 
                         <div className="col-12 mt-4">
-                            {deliveries && deliveries.length > 0 && (
-                                <DropDownMenu
-                                    listItem={
-                                        deliveries &&
-                                        deliveries.map((d, i) => {
-                                            const newD = {
-                                                value: d,
-                                                label:
-                                                    d.name +
-                                                    ' (' +
-                                                    d.price.$numberDecimal +
-                                                    ' VND)',
-                                            };
-                                            return newD;
-                                        })
-                                    }
-                                    value={order.delivery}
-                                    setValue={(delivery) => {
-                                        const {
-                                            deliveryPrice,
-                                            amountFromUser2,
-                                        } = totalDelivery(delivery, userLevel);
-                                        setOrder({
-                                            ...order,
-                                            delivery,
-                                            deliveryId: delivery._id,
-                                            deliveryPrice,
-                                            amountFromUser2,
-                                            amountFromUser:
-                                                order.amountFromUser1 +
-                                                amountFromUser2,
-                                            amountToGD:
-                                                order.amountFromUser1 +
-                                                amountFromUser2 -
-                                                order.amountToStore,
-                                        });
-                                    }}
-                                    size="large"
-                                    label="Delivery unit"
-                                />
-                            )}
+                            <h6>Đơn vị vận chuyển</h6>
+                                <p>Giao hàng tiết kiệm</p> 
                         </div>
                     </div>
                 </div>
@@ -423,58 +362,45 @@ const CheckoutForm = ({
                         <hr />
 
                         <dl className="row">
-                            <dt className="col-sm-3 col-6">Product's total</dt>
+                            <dt className="col-sm-3 col-6">Tổng số tiền</dt>
                             <dd className="col-sm-9 col-6">
                                 <dl className="row">
                                     <dd className="col-sm-6 res-hide">
                                         <p className="text-decoration-line-through text-muted">
                                             {formatPrice(order.totalPrice)} VND
                                         </p>
-
-                                        <h4 className="text-decoration-line-through text-primary fs-5">
-                                            {formatPrice(
-                                                order.totalPromotionalPrice,
-                                            )}{' '}
-                                            VND
-                                        </h4>
                                     </dd>
                                     <dd className="col-sm-6">
 
                                         <h4 className="text-primary fs-5">
-                                            {formatPrice(order.amountFromUser1)}{' '}
+                                            {formatPrice(order.totalPromotionalPrice)}{' '}
                                             VND
                                         </h4>
                                     </dd>
                                 </dl>
                             </dd>
 
-                            <dt className="col-sm-3 col-6">Delivery's total</dt>
+                            <dt className="col-sm-3 col-6">Phí vận chuyển</dt>
                             <dd className="col-sm-9 col-6">
                                 <dl className="row">
                                     <dd className="col-sm-6 res-hide">
                                         <p className="text-decoration-line-through text-muted">
-                                            {formatPrice(order.deliveryPrice)}{' '}
+                                            {formatPrice(30000)}{' '}
                                             VND
                                         </p>
-
-                                        <h4 className="text-decoration-line-through text-primary fs-5">
-                                            {formatPrice(order.deliveryPrice)}{' '}
-                                            VND
-                                        </h4>
                                     </dd>
                                     <dd className="col-sm-6">
                                         <h4 className="text-primary fs-5">
-                                            {formatPrice(order.amountFromUser2)}{' '}
-                                            VND
+                                            Miễn Phí
                                         </h4>
                                     </dd>
                                 </dl>
                             </dd>
 
-                            <dt className="col-sm-3 col-6">Final total</dt>
+                            <dt className="col-sm-3 col-6">Tổng thanh toán</dt>
                             <dd className="col-sm-9 col-6">
                                 <h4 className="text-primary fs-5">
-                                    {formatPrice(order.amountFromUser)} VND
+                                    {formatPrice(order.amount)} VND
                                 </h4>
                             </dd>
                         </dl>
@@ -491,7 +417,7 @@ const CheckoutForm = ({
                                 className="btn btn-primary btn-lg ripple w-100 mb-1"
                                 onClick={handleSubmit}
                             >
-                                Only order
+                                Thanh toán
                             </button>
 {/* 
                             <div style={{ position: 'relative', zIndex: '1' }}>

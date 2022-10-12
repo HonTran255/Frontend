@@ -14,7 +14,7 @@ const HomePage = () => {
             </div>
 
             <div className="mb-4">
-                <ListBestSellerProduct heading="Best Seller" />
+                <ListBestSellerProduct heading="Bán chạy" />
             </div>
 
         </MainLayout>

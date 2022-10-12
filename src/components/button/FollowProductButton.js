@@ -88,12 +88,12 @@ const FollowProductButton = ({
             ) : followingFlag ? (
                 <span>
                     <i className="fas fa-heart"></i>
-                    <span className="ms-2 res-hide-md">Following</span>
+                    <span className="ms-2 res-hide-md">Đã yêu thích</span>
                 </span>
             ) : (
                 <span>
                     <i className="far fa-heart"></i>
-                    <span className="ms-2 res-hide-md">Follow</span>
+                    <span className="ms-2 res-hide-md">Yêu thích</span>
                 </span>
             )}
         </button>

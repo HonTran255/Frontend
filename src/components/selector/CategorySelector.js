@@ -10,7 +10,7 @@ const CategorySelector = ({
     defaultValue = '',
     isActive = false,
     selected = 'child',
-    label = 'Choosed category',
+    label = 'Chọn danh mục',
     onSet = () => {},
     isSelected = true,
     isRequired = false,
@@ -164,7 +164,7 @@ const CategorySelector = ({
                                     key={index}
                                     type="button"
                                     className={`list-group-item ripple list-group-item-action d-flex justify-content-between align-items-center ${
-                                        category._id == lv2Filter.categoryId
+                                        category._id === lv2Filter.categoryId
                                             ? 'active'
                                             : ''
                                     }`}
@@ -197,7 +197,7 @@ const CategorySelector = ({
                                     key={index}
                                     type="button"
                                     className={`list-group-item ripple list-group-item-action d-flex justify-content-between align-items-center  ${
-                                        category._id == lv3Filter.categoryId &&
+                                        category._id === lv3Filter.categoryId &&
                                         'active'
                                     }`}
                                     onClick={() =>
@@ -230,7 +230,7 @@ const CategorySelector = ({
                                     type="button"
                                     className={`list-group-item ripple list-group-item-action ${
                                         selectedCategory &&
-                                        category._id == selectedCategory._id
+                                        category._id === selectedCategory._id
                                             ? 'active'
                                             : ''
                                     }`}

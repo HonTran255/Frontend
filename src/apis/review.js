@@ -1,11 +1,11 @@
 const API = 'http://localhost:8000/api';
 
 export const listReviews = (filter) => {
-    const { productId, storeId, userId, rating, sortBy, order, limit, page } =
+    const { productId, userId, rating, sortBy, order, limit, page } =
         filter;
 
     return fetch(
-        `${API}/reviews?productId=${productId}&storeId=${storeId}&userId=${userId}&rating=${rating}&sortBy=${sortBy}&order=${order}&limit=${limit}&page=${page}`,
+        `${API}/reviews?productId=${productId}&userId=${userId}&rating=${rating}&sortBy=${sortBy}&order=${order}&limit=${limit}&page=${page}`,
         {
             method: 'GET',
             headers: {

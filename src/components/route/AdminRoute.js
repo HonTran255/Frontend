@@ -1,24 +1,8 @@
-import { Route, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { getToken } from '../../apis/auth';
 
-const AdminRoute = ({ component: Page, ...rest }) => {
-    return (
-        <Route
-            {...rest}
-            render={(props) =>
-                getToken() && getToken().role === 'admin' ? (
-                    <Page {...props} />
-                ) : (
-                    <Navigate
-                        to={{
-                            pathname: '/',
-                            state: { from: props.location },
-                        }}
-                    />
-                )
-            }
-        />
-    );
-};
+    const AdminRoute = ({ children }) => {
+        return   getToken() && getToken().role === 'admin' ? children : <Navigate to="/" />
+      };
 
 export default AdminRoute;

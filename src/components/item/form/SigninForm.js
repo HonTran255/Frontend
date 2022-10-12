@@ -131,10 +131,10 @@ const SigninForm = ({ onSwap = () => {} }) => {
                 <div className="col-12">
                     <Input
                         type="text"
-                        label="Email address or phone number"
+                        label="Địa chỉ email hoặc số điện thoại"
                         value={account.username}
                         isValid={account.isValidUsername}
-                        feedback="Please provide a valid email address or phone number."
+                        feedback="Hãy điền email hoặc số điện thoại."
                         validator="email|phone"
                         onChange={(value) =>
                             handleChange('username', 'isValidUsername', value)
@@ -148,11 +148,11 @@ const SigninForm = ({ onSwap = () => {} }) => {
                 <div className="col-12">
                     <Input
                         type="password"
-                        label="Password"
-                        validator="password"
+                        label="Mật khẩu"
+                        validator="Mật khẩu"
                         value={account.password}
                         isValid={account.isValidPassword}
-                        feedback="Please provide a valid password."
+                        feedback="Hãy điền mật khẩu."
                         onChange={(value) =>
                             handleChange('password', 'isValidPassword', value)
                         }
@@ -180,30 +180,30 @@ const SigninForm = ({ onSwap = () => {} }) => {
                         className="btn btn-primary ripple fw-bold"
                         onClick={handleFormSubmit}
                     >
-                        Sign in
+                        Đăng nhập
                     </button>
                 </div>
 
                 <div className="col-12 mt-4">
                     <small className="text-center d-block text-muted">
-                        Forgot password?{' '}
+                       Quên mật khẩu?{' '}
                         <span
                             className="text-primary text-decoration-underline"
                             style={{ cursor: 'pointer' }}
                             onClick={handleForgorPassword}
                         >
-                            Send email
+                            Gửi email
                         </span>
                     </small>
 
                     <small className="text-center d-block text-muted">
-                        Don't have an account?{' '}
+                       Bạn chưa có tài khoản?{' '}
                         <span
                             className="text-primary text-decoration-underline"
                             style={{ cursor: 'pointer' }}
                             onClick={onSwap}
                         >
-                            Sign up
+                            Đăng ký
                         </span>
                     </small>
                 </div>
@@ -221,8 +221,8 @@ const SigninForm = ({ onSwap = () => {} }) => {
                 <div className="col-12 mt-4">
                     <small className="text-center d-block mx-4">
                         <span className="text-muted">
-                            By Signing in or Continue with Google or Facebook,
-                            you agree to GoodDeal's{' '}
+                            Bằng cách đăng nhập và tiếp tục với Google hoặc Facebook,
+                            bạn đồng ý với A-Z Figure's{' '}
                         </span>
                         <Link to="/legal/termsOfUse" target="_blank">
                             Terms of Use

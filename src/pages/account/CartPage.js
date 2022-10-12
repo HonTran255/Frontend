@@ -62,27 +62,14 @@ const CartPage = (props) => {
                                     aria-labelledby={`panelsStayOpen-collapse-${index}`}
                                 >
                                     <div className="accordion-body px-2">
-                                        {cart.storeId &&
-                                            !cart.storeId.isActive && (
-                                                <Error msg="This store is banned by GoodDeal!" />
-                                            )}
 
-                                        {cart.storeId &&
-                                            cart.storeId.isActive &&
-                                            !cart.storeId.isOpen && (
-                                                <Error msg="This store is closed, can't order in this time!" />
-                                            )}
-
-                                        {cart.storeId &&
-                                            cart.storeId.isActive &&
-                                            cart.storeId.isOpen && (
+                                        
                                                 <ListCartItemsForm
                                                     cartId={cart._id}
-                                                    storeId={cart.storeId._id}
                                                     userId={cart.userId._id}
                                                     onRun={() => setRun(!run)}
                                                 />
-                                            )}
+                                            
                                     </div>
                                 </div>
                             </div>

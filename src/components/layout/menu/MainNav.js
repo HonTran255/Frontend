@@ -30,7 +30,7 @@ const MainNav = ({ navFor = 'user' }) => {
         <header className="main-nav cus-nav navbar fixed-top navbar-expand-md navbar-dark bg-primary">
             {isConfirming && (
                 <ConfirmDialog
-                    title="Sign out"
+                    title="Đăng xuất"
                     color="danger"
                     onSubmit={onSignoutSubmit}
                     onClose={() => setIsConfirming(false)}
@@ -78,7 +78,7 @@ const MainNav = ({ navFor = 'user' }) => {
                                         {/* <i className="fas fa-heart" style={{ color: '#ed4956' }}></i> */}
                                     </Link>
                                     <small className="cus-tooltip-msg">
-                                        Following
+                                        Đã yêu thích
                                     </small>
                                 </li>
                             )}
@@ -98,12 +98,12 @@ const MainNav = ({ navFor = 'user' }) => {
                                                     ? cartCount
                                                     : '9+'}
                                                 <span className="visually-hidden">
-                                                    products
+                                                    sản phẩm
                                                 </span>
                                             </span>
                                         }
                                         <small className="cus-tooltip-msg">
-                                            Cart
+                                            Giỏ hàng
                                         </small>
                                     </div>
                                 </li>
@@ -132,7 +132,7 @@ const MainNav = ({ navFor = 'user' }) => {
                                         <i className="fas fa-home"></i>
                                     </Link>
                                     <small className="cus-tooltip-msg">
-                                        Back to A-Z Figure!
+                                        Trở về A-Z Figure!
                                     </small>
                                 </li>
                             )}
@@ -188,7 +188,7 @@ const MainNav = ({ navFor = 'user' }) => {
                                             to="/"
                                         >
                                             <i className="fas fa-home me-2"></i>
-                                            Home
+                                            Trang chủ
                                         </Link>
                                     </li>
 
@@ -199,7 +199,7 @@ const MainNav = ({ navFor = 'user' }) => {
                                                 to="/account/following"
                                             >
                                                 <i className="fas fa-heart me-2"></i>
-                                                Following
+                                                Đã yêu thích
                                             </Link>
                                         </li>
                                     )}
@@ -212,7 +212,7 @@ const MainNav = ({ navFor = 'user' }) => {
                                                     to="/cart"
                                                 >
                                                     <i className="fas fa-shopping-basket me-2"></i>
-                                                    Cart
+                                                    Giỏ hàng
                                                 </Link>
                                             </li>
                                         )}
@@ -235,7 +235,7 @@ const MainNav = ({ navFor = 'user' }) => {
                                         onClick={handleSignout}
                                     >
                                         <i className="fas fa-sign-out-alt me-2"></i>
-                                        Sign out
+                                        Đăng xuất
                                     </li>
                                 </ul>
                             </div>

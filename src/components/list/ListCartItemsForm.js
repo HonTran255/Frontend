@@ -20,7 +20,7 @@ import CheckoutForm from '../item/form/CheckoutForm';
 
 const IMG = process.env.REACT_APP_STATIC_URL;
 
-const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
+const ListCartItems = ({ cartId = '', userId = '', onRun }) => {
     const [isloading, setIsLoading] = useState(false);
     const [isConfirming, setIsConfirming] = useState(false);
     const [error, setError] = useState('');
@@ -29,7 +29,6 @@ const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
 
     const [showCheckoutFlag, toogleShowCheckoutFlag] = useToggle(false);
 
-    const { level } = useSelector((state) => state.account.user);
     const [updateDispatch] = useUpdateDispatch();
     const { _id, accessToken } = getToken();
 
@@ -38,7 +37,7 @@ const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
     const [totals, setTotals] = useState({
         totalPrice: 0,
         totalPromotionalPrice: 0,
-        amountFromUser1: 0,
+        amount: 0,
     });
 
     const init = () => {
@@ -53,17 +52,15 @@ const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
                     const {
                         totalPrice,
                         totalPromotionalPrice,
-                        amountFromUser1,
-                    } = totalProducts(data.items, level);
+                    } = totalProducts(data.items);
                     setTotals({
                         totalPrice,
                         totalPromotionalPrice,
-                        amountFromUser1,
                     });
                 }
                 setIsLoading(false);
             })
-            .catch((error) => {
+            .catch(() => {
                 setError('Server Error');
                 setIsLoading(false);
             });
@@ -71,7 +68,7 @@ const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
 
     useEffect(() => {
         if (cartId) init();
-    }, [cartId, storeId, userId, level, run]);
+    }, [cartId, userId, run]);
 
     const handleDelete = (item) => {
         if (!item) return;
@@ -140,7 +137,7 @@ const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
             {success && <Success msg={success} />}
             {isConfirming && (
                 <ConfirmDialog
-                    title="Delete product"
+                    title="Xóa"
                     color="danger"
                     onSubmit={onSubmit}
                     onClose={() => setIsConfirming(false)}
@@ -194,17 +191,6 @@ const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
                             </Link>
 
                             <div className="mt-2">
-                                {item.styleValueIds &&
-                                    item.styleValueIds.map((value, index) => (
-                                        <p className="fs-6" key={index}>
-                                            {value.styleId &&
-                                                value.styleId.name}
-                                            : {value.name}
-                                        </p>
-                                    ))}
-                            </div>
-
-                            <div className="mt-2">
                                 <p className="text-decoration-line-through text-muted">
                                     {item.productId &&
                                         item.productId.price &&
@@ -216,7 +202,7 @@ const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
                                     VND
                                 </p>
 
-                                <h4 className="text-primary fs-5">
+                                <h4 className=" text-primary fs-5">
                                     {item.productId &&
                                         item.productId.promotionalPrice &&
                                         formatPrice(
@@ -234,20 +220,12 @@ const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
 
                             {item.productId &&
                                 item.productId.isActive &&
-                                !item.productId.isSelling && (
-                                    <Error msg="The product is out of business, please delete it from your cart, you can continue with others!" />
-                                )}
-
-                            {item.productId &&
-                                item.productId.isActive &&
-                                item.productId.isSelling &&
                                 item.productId.quantity <= 0 && (
                                     <Error msg="The product is sold out, please delete it from your cart, you can continue with others!" />
                                 )}
 
                             {item.productId &&
                                 item.productId.isActive &&
-                                item.productId.isSelling &&
                                 item.productId.quantity > 0 &&
                                 item.productId.quantity < item.count && (
                                     <Error
@@ -259,7 +237,6 @@ const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
                         <div className="d-flex justify-content-between align-items-center my-2">
                             {item.productId &&
                                 item.productId.isActive &&
-                                item.productId.isSelling &&
                                 item.productId.quantity > 0 && (
                                     <div className="me-2">
                                         <DropDownMenu
@@ -295,7 +272,7 @@ const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
                                 onClick={() => handleDelete(item)}
                             >
                                 <i className="fas fa-trash-alt"></i>
-                                <span className="ms-2 res-hide">Del</span>
+                                <span className="ms-2 res-hide">Xóa</span>
                             </button>
                         </div>
                     </div>
@@ -307,7 +284,6 @@ const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
                     prev &&
                     item.productId &&
                     item.productId.isActive &&
-                    item.productId.isSelling &&
                     item.productId.quantity > 0 &&
                     item.productId.quantity >= item.count,
                 true,
@@ -320,16 +296,9 @@ const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
                                     {formatPrice(totals.totalPrice)} VND
                                 </p>
 
-                                <h4 className="text-decoration-line-through text-primary fs-5">
+                                <h4 className=" text-primary fs-5">
                                     {formatPrice(totals.totalPromotionalPrice)}{' '}
                                     VND
-                                </h4>
-                            </div>
-
-                            <div className="me-4">
-
-                                <h4 className="text-primary fs-5">
-                                    {formatPrice(totals.amountFromUser1)} VND
                                 </h4>
                             </div>
                         </div>
@@ -344,7 +313,7 @@ const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
                         type="button"
                         onClick={toogleShowCheckoutFlag}
                     >
-                        Proceed to checkout
+                        Đặt hàng
                     </button>
                 </div>
             )}
@@ -354,7 +323,6 @@ const ListCartItems = ({ cartId = '', storeId = '', userId = '', onRun }) => {
                     <CheckoutForm
                         cartId={cartId}
                         userId={userId}
-                        storeId={storeId}
                         items={items}
                     />
                 </div>

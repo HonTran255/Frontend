@@ -120,7 +120,6 @@ export const updateListImages = (
     photo,
     index,
     productId,
-    storeId,
 ) => {
     return fetch(
         `${API}/product/images/${productId}/${userId}?index=${index}`,
@@ -137,7 +136,7 @@ export const updateListImages = (
         .catch((error) => console.log(error));
 };
 
-export const removeListImages = (userId, token, index, productId, storeId) => {
+export const removeListImages = (userId, token, index, productId) => {
     return fetch(
         `${API}/product/images/${productId}/${userId}?index=${index}`,
         {

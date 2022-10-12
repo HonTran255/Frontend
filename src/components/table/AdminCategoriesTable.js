@@ -163,7 +163,7 @@ const AdminCateroriesTable = ({ heading = 'Category' }) => {
                     title="Delete category"
                     message={
                         <span>
-                            Are you sure you want to delete
+                           Bạn muốn xóa?
                             <CategorySmallCard category={deletedCategory} />
                         </span>
                     }
@@ -177,7 +177,7 @@ const AdminCateroriesTable = ({ heading = 'Category' }) => {
                     title="Restore category"
                     message={
                         <span>
-                            Are you sure you want to restore
+                            Bạn muốn hoàn lại?
                             <CategorySmallCard category={restoredCategory} />
                         </span>
                     }

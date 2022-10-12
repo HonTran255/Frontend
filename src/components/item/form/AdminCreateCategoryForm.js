@@ -11,7 +11,7 @@ import Success from '../../ui/Success';
 import ConfirmDialog from '../../ui/ConfirmDialog';
 import CategorySelector from '../../selector/CategorySelector';
 
-const AdminCreateCategoryForm = (props) => {
+const AdminCreateCategoryForm = () => {
     const [isloading, setIsLoading] = useState(false);
     const [isConfirming, setIsConfirming] = useState(false);
     const [error, setError] = useState('');
@@ -95,7 +95,7 @@ const AdminCreateCategoryForm = (props) => {
             {isloading && <Loading />}
             {isConfirming && (
                 <ConfirmDialog
-                    title="Create category"
+                    title="Tạo danh mục"
                     onSubmit={onSubmit}
                     onClose={() => setIsConfirming(false)}
                 />
@@ -106,13 +106,13 @@ const AdminCreateCategoryForm = (props) => {
                 onSubmit={handleSubmit}
             >
                 <div className="col-12 bg-primary p-3">
-                    <h1 className="text-white fs-5 m-0">Create new category</h1>
+                    <h1 className="text-white fs-5 m-0">Tạo danh mục</h1>
                 </div>
 
                 <div className="col-12 mt-4 px-4">
                     <p className="">Choose parent category</p>
                     <CategorySelector
-                        label="Choosed parent category"
+                        label="Chọn danh mục cha"
                         selected="parent"
                         isActive={false}
                         onSet={(category) =>
@@ -127,10 +127,10 @@ const AdminCreateCategoryForm = (props) => {
                 <div className="col-12 px-4 mt-2">
                     <Input
                         type="text"
-                        label="Category name"
+                        label="Tên danh mục"
                         value={newCategory.name}
                         isValid={newCategory.isValidName}
-                        feedback="Please provide a valid category name."
+                        feedback="Hãy điền tên danh mục."
                         validator="anything"
                         onChange={(value) =>
                             handleChange('name', 'isValidName', value)
@@ -143,12 +143,12 @@ const AdminCreateCategoryForm = (props) => {
 
                 <div className="col-12 px-4 mt-2">
                     <InputFile
-                        label="Category image"
+                        label="Hình ảnh danh mục"
                         size="avatar"
                         noRadius={true}
                         value={newCategory.image}
                         isValid={newCategory.isValidImage}
-                        feedback="Please provide a valid category avatar."
+                        feedback="Hãy chọn ảnh."
                         accept="image/jpg, image/jpeg, image/png, image/gif"
                         onChange={(value) =>
                             handleChange('image', 'isValidImage', value)
@@ -175,8 +175,7 @@ const AdminCreateCategoryForm = (props) => {
                         to="/admin/category"
                         className="text-decoration-none cus-link-hover res-w-100-md my-2"
                     >
-                        <i className="fas fa-arrow-circle-left"></i> Back to
-                        Category Manager
+                        <i className="fas fa-arrow-circle-left"></i> Trở về
                     </Link>
                     <button
                         type="submit"
@@ -184,7 +183,7 @@ const AdminCreateCategoryForm = (props) => {
                         onClick={handleSubmit}
                         style={{ width: '324px', maxWidth: '100%' }}
                     >
-                        Submit
+                        Tạo
                     </button>
                 </div>
             </form>

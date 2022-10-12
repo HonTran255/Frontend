@@ -134,7 +134,7 @@ const CategoryPage = (props) => {
                 <div className="d-flex justify-content-between align-items-end">
                     <ProductFilter filter={filter} setFilter={setFilter} />
                     <span className="me-3 text-nowrap">
-                        {pagination.size || 0} results
+                        {pagination.size || 0} kết quả
                     </span>
                 </div>
 
@@ -150,7 +150,7 @@ const CategoryPage = (props) => {
                         ))}
                 </div>
 
-                {pagination.size != 0 && (
+                {pagination.size !== 0 && (
                     <Pagination
                         pagination={pagination}
                         onChangePage={handleChangePage}

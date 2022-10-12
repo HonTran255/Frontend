@@ -3,7 +3,7 @@ import AccountLayout from '../../components/layout/AccountLayout';
 import UserOrdersTable from '../../components/table/UserOrdersTable';
 import useToggle from '../../hooks/useToggle';
 
-const PurchasePage = (props) => {
+const PurchasePage = () => {
     const user = useSelector((state) => state.account.user);
     const [flag, toggleFlag] = useToggle(true);
     return (

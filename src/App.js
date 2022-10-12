@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
-// import PrivateRoute from '../components/route/PrivateRoute';
-// import AdminRoute from './components/route/AdminRoute';
+import PrivateRoute from './components/route/PrivateRoute';
+import AdminRoute from './components/route/AdminRoute';
 
 //core
 import HomePage from './pages/core/HomePage';
@@ -16,18 +16,18 @@ import AdminCategoryPage from './pages/admin/CategoryPage';
 import AdminCreateCategoryPage from './pages/admin/CreateCategoryPage';
 import AdminEditCategoryPage from './pages/admin/EditCategoryPage';
 import AdminProductPage from './pages/admin/ProductPage'
+import AdminCreateProductPage from './pages/admin/CreateProductPage';
+import AdminEditProductPage from './pages/admin/EditProductPage';
+
 
 //account
 import ProfilePage from "./pages/account/ProfilePage";
 import AddressesPage from "./pages/account/AddressesPage";
-import FollowingPage from "./pages/account/FollowingPage"; //api bị lỗi
+import FollowingPage from "./pages/account/FollowingPage"; 
 import ChangePasswordPage from "./pages/account/ChangePasswordPage";
 // import PurchasePage from "./pages/account/PurchasePage";
 import CartPage from "./pages/account/CartPage";
 // import OrderDetailPage from "./pages/account/OrderDetailPage";
-
-
-
 
 function App() {
   return (
@@ -60,38 +60,84 @@ function App() {
           <Route
             path="/admin/user"
             exact
-            element= {<AdminUserPage/>}
+            element= {
+              <AdminRoute>
+                <AdminUserPage/>
+              </AdminRoute>
+            }
           />
           <Route
             path="/admin/category"
             exact
-            element={<AdminCategoryPage/>}
+            element= {
+              <AdminRoute>
+                <AdminCategoryPage/>
+              </AdminRoute>
+            }
           />
           <Route
             path="/admin/category/createNewCategory"
             exact
-            element = {<AdminCreateCategoryPage/>}
+            element= {
+              <AdminRoute>
+                <AdminCreateCategoryPage/>
+              </AdminRoute>
+            }
           />
           <Route
             path="/admin/category/editCategory/:categoryId"
             exact
-            element = {<AdminEditCategoryPage/>}
+            element= {
+              <AdminRoute>
+                <AdminEditCategoryPage/>
+              </AdminRoute>
+            }
           />
           <Route
             path="/admin/product"
             exact
-            element={<AdminProductPage/>}
+            element= {
+              <AdminRoute>
+                <AdminProductPage/>
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/product/createNewProduct"
+            exact
+            element= {
+              <AdminRoute>
+                <AdminCreateProductPage/>
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/product/editProduct/:productId"
+            exact
+            element= {
+              <AdminRoute>
+                <AdminEditProductPage/>
+              </AdminRoute>
+            }
           />
     {/* account */}
           <Route
             path="/account/profile"
             exact
-            element={<ProfilePage/>}
+            element={
+              <PrivateRoute>
+                <ProfilePage/>
+              </PrivateRoute>
+          }
           />
           <Route
             path="/account/addresses"
             exact
-            element= {<AddressesPage/>}
+            element={
+              <PrivateRoute>
+                <AddressesPage/>
+              </PrivateRoute>
+          }
           />
           {/* <Route
             path="/account/purchase/detail/:orderId"
@@ -102,14 +148,28 @@ function App() {
           <Route
             path="/account/following"
             exact
-            element ={<FollowingPage/>}
+            element={
+              <PrivateRoute>
+                <FollowingPage/>
+              </PrivateRoute>
+            }
           />
           <Route
             path="/change/password/:passwordCode"
             exact
-            element={<ChangePasswordPage/>}
+            element={
+              <PrivateRoute>
+                <ChangePasswordPage/>
+              </PrivateRoute>
+            }
           />
-          <Route path="/cart" exact element={<CartPage/>} />
+          <Route path="/cart" exact 
+              element={
+                <PrivateRoute>
+                  <CartPage/>
+                </PrivateRoute>
+              }
+          />
           {/* <Route
             path="/account/purchase"
             exact

@@ -24,9 +24,9 @@ const AccountSideBar = ({ user = {} }) => {
                         }`}
                     >
                         <i className="fas fa-user-circle"></i>
-                        <span className="ms-3 res-hide-xl">Your profile</span>
+                        <span className="ms-3 res-hide-xl">Thông tin cá nhân</span>
                         <span className="ms-3 d-none res-dis-inline-xl res-hide-lg">
-                            Profile
+                            Thông tin
                         </span>
                     </Link>
                 </li>
@@ -41,10 +41,10 @@ const AccountSideBar = ({ user = {} }) => {
                         >
                             <i className="fas fa-shopping-bag"></i>
                             <span className="ms-3 res-hide-xl">
-                                Purchase history
+                                Lịch sử mua hàng
                             </span>
                             <span className="ms-3 d-none res-dis-inline-xl res-hide-lg">
-                                Purchases
+                                Lịch sử
                             </span>
                         </Link>
                     </li>
@@ -60,10 +60,10 @@ const AccountSideBar = ({ user = {} }) => {
                         >
                             <i className="fas fa-map-marker-alt"></i>
                             <span className="ms-3 res-hide-xl">
-                                Your addresses
+                                Địa chỉ của bạn
                             </span>
                             <span className="ms-3 d-none res-dis-inline-xl res-hide-lg">
-                                Address
+                                Địa chỉ
                             </span>
                         </Link>
                     </li>
@@ -77,7 +77,7 @@ const AccountSideBar = ({ user = {} }) => {
                         }`}
                     >
                         <i className="fas fa-heart"></i>
-                        <span className="ms-3 res-hide-lg">Following</span>
+                        <span className="ms-3 res-hide-lg">Sản phẩm yêu thích</span>
                     </Link>
                 </li>
 

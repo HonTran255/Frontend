@@ -110,12 +110,11 @@ const SignupForm = ({ onSwap = () => {} }) => {
                     title="Sign up"
                     message={
                         <small className="">
-                            By Signing up or Continue with Google or Facebook,
-                            you agree to A-Z Figure's{' '}
+                            Tiếp tục với Google hoặc Facebook{' '}
                             <Link to="/legal/termsOfUse" target="_blank">
                                 Terms of Use
                             </Link>{' '}
-                            and{' '}
+                            và {' '}
                             <Link to="/legal/privacy" target="_blank">
                                 Privacy Policy
                             </Link>
@@ -131,11 +130,11 @@ const SignupForm = ({ onSwap = () => {} }) => {
                 <div className="col-6">
                     <Input
                         type="text"
-                        label="First name"
+                        label="Họ"
                         value={account.firstname}
                         isValid={account.isValidFirstname}
-                        feedback="Please provide a valid firstname."
-                        validator="name"
+                        feedback="Hãy điền họ của bạn."
+                        validator="họ"
                         onChange={(value) =>
                             handleChange('firstname', 'isValidFirstname', value)
                         }
@@ -148,11 +147,11 @@ const SignupForm = ({ onSwap = () => {} }) => {
                 <div className="col-6">
                     <Input
                         type="text"
-                        label="Last name"
+                        label="Tên"
                         value={account.lastname}
                         isValid={account.isValidLastname}
-                        feedback="Please provide a valid lastname."
-                        validator="name"
+                        feedback="Hãy điền tên của bạn."
+                        validator="tên"
                         onChange={(value) =>
                             handleChange('lastname', 'isValidLastname', value)
                         }
@@ -165,10 +164,10 @@ const SignupForm = ({ onSwap = () => {} }) => {
                 <div className="col-12">
                     <Input
                         type="text"
-                        label="Email address or phone number"
+                        label="Email hoặc số điện thoại"
                         value={account.username}
                         isValid={account.isValidUsername}
-                        feedback="Please provide a valid email address or phone number."
+                        feedback="Hãy điền email hoặc số điện thoại của bạn."
                         validator="email|phone"
                         onChange={(value) =>
                             handleChange('username', 'isValidUsername', value)
@@ -182,11 +181,11 @@ const SignupForm = ({ onSwap = () => {} }) => {
                 <div className="col-12">
                     <Input
                         type="password"
-                        label="Password"
+                        label="Mật khẩu"
                         hasEditBtn={true}
                         value={account.password}
                         isValid={account.isValidPassword}
-                        feedback="Password must contain at least 6 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character such as @, $, !, %, *, ?, &."
+                        feedback="Mật khẩu phải có ít nhất 6 ký tự, ít nhất một ký tự in hoa, 1 ký tự thường, 1 số và 1 ký tự đặc biệt như @, $, !, %, *, ?, &."
                         validator="password"
                         onChange={(value) =>
                             handleChange('password', 'isValidPassword', value)
@@ -215,18 +214,18 @@ const SignupForm = ({ onSwap = () => {} }) => {
                         className="btn btn-primary ripple fw-bold"
                         onClick={handleSubmit}
                     >
-                        Sign up
+                        Đăng ký
                     </button>
                 </div>
 
                 <div className="col-12 mt-4">
                     <small className="text-center d-block text-muted">
-                        Have an account?{' '}
+                        Bạn đã có tài khoản?{' '}
                         <span
                             className="sign-in-item text-primary text-decoration-underline"
                             onClick={onSwap}
                         >
-                            Sign in
+                            Đăng nhập
                         </span>
                     </small>
                 </div>
@@ -244,8 +243,7 @@ const SignupForm = ({ onSwap = () => {} }) => {
                 <div className="col-12 mt-4">
                     <small className="text-center d-block mx-4">
                         <span className="text-muted">
-                            By Signing up or Continue with Google or Facebook,
-                            you agree to GoodDeal's{' '}
+                           Tiếp tục với Google hoặc Facebook{' '}
                         </span>
                         <Link to="/legal/termsOfUse" target="_blank">
                             Terms of Use

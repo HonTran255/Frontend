@@ -4,7 +4,7 @@ import AccountLayout from '../../components/layout/AccountLayout';
 import FollowingProductsCollection from '../../components/collection/FollowingProductCollection';
 
 
-const FollowingPage = (props) => {
+const FollowingPage = () => {
     const user = useSelector((state) => state.account.user);
     const [flag, toggleFlag] = useToggle(true);
     return (
@@ -22,7 +22,7 @@ const FollowingPage = (props) => {
                     </button>
 
                     <small className="cus-tooltip-msg">
-                        Following products
+                        Sản phẩm yêu thích
                     </small>
                 </div>
             </div>

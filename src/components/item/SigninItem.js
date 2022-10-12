@@ -30,7 +30,7 @@ const SigninButton = ({ title = 'Sign in', className = '' }) => {
                 )}
             </Modal>
 
-            <small className="cus-tooltip-msg">Join with us!</small>
+            <small className="cus-tooltip-msg">Tham gia với chúng tôi!</small>
         </div>
     );
 };

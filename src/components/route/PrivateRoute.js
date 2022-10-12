@@ -1,22 +1,7 @@
-import { Route, Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { getToken } from '../../apis/auth';
 
-const PrivateRoute = ({ component: Page, ...rest }) => (
-    <Route
-        {...rest}
-        render={(props) =>
-            getToken() ? (
-                <Page {...props} />
-            ) : (
-                <Redirect
-                    to={{
-                        pathname: '/',
-                        state: { from: props.location },
-                    }}
-                />
-            )
-        }
-    />
-);
-
+const PrivateRoute = ({ children }) => {
+    return  getToken() ? children : <Navigate to="/" />;
+  };
 export default PrivateRoute;

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-const IMG = 'http://localhost:8000/static';
+const IMG = process.env.REACT_APP_STATIC_URL;
 
 const CategorySmallCard = ({ category = {}, style = {}, parent = true }) => (
     <span className="d-inline-flex align-items-center" style={style}>
