@@ -15,7 +15,7 @@ const listOptions = [
     },
 ];
 
-const SearchBar = (props) => {
+const SearchBar = () => {
     const location = useLocation();
     const history = useNavigate();
 
@@ -52,12 +52,13 @@ const SearchBar = (props) => {
             className="search-bar m-0 input-group"
             onSubmit={handleFormSubmit}
         >
-            <DropDownMenu
-                listItem={listOptions}
-                value={option}
-                setValue={setOption}
-            />
-
+            <button
+                className="btn btn-outline-light cus-outline text-white ripple"
+                type="submit"
+                onClick={handleFormSubmit}
+            >
+                <i className='fa fa-search'></i>
+            </button>
             <input
                 className="form-control"
                 type="search"
@@ -71,7 +72,7 @@ const SearchBar = (props) => {
                 type="submit"
                 onClick={handleFormSubmit}
             >
-                <i className="fas fa-search"></i>
+                <i>Tất cả sản phẩm</i>
             </button>
         </form>
     );

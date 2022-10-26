@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { getToken } from '../../apis/auth';
-import { listOrdersForAdmin, listOrdersByStore } from '../../apis/order';
+import { listOrdersForAdmin} from '../../apis/order';
 import {
     listProductsForAdmin,
 } from '../../apis/product';
 import { listUserForAdmin } from '../../apis/user';
-import { groupByDate, groupByJoined, groupBySold } from '../../helper/groupBy';
-import { humanReadableDate } from '../../helper/humanReadable';
+import { groupByDate, groupByJoined, groupBySold } from '../../helpers/groupBy';
+import { humanReadableDate } from '../../helpers/humanReadable';
 import LineChart from './LineChart';
 import BarChart from './BarChart';
 import DoughnutChart from './DoughnutChart';
@@ -16,22 +16,23 @@ import Loading from '../ui/Loading';
 import Error from '../ui/Error';
 import UserSmallCard from '../card/UserSmallCard';
 import ProductSmallCard from '../card/ProductSmallCard';
+import { PDFExport } from "@progress/kendo-react-pdf";
+import { formatPrice } from '../../helpers/formatPrice';
+
 
 const groupByFunc = {
     order: groupByDate,
     product: groupBySold,
-    user: groupByJoined,
-    store: groupByJoined,
+    user: groupByJoined
 };
 
 const titles = {
-    order: 'Sales statistics by orders',
-    product: 'Sales statistics by products',
-    user: 'Statistics of new users',
-    store: 'Statistics of new stores',
+    order: 'Số tiền',
+    product: 'Sản phẩm bán được',
+    user: 'Khách hàng mới'
 };
 
-const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
+const ListStatisticsItems = ({ by = 'admin'}) => {
     const [isloading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -39,13 +40,11 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
         order: [],
         product: [],
         user: [],
-        store: [],
     });
     const [sizes, setSizes] = useState({
         order: 0,
         product: 0,
         user: 0,
-        store: 0,
     });
     const [options, setOptions] = useState({
         flag: 'order',
@@ -55,7 +54,7 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
     });
 
     const { _id, accessToken } = getToken();
-
+    const pdfExportComponent = useRef(null);
     const adminInit = async () => {
         setError('');
         setIsLoading(true);
@@ -66,7 +65,7 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
                 sortBy: 'createdAt',
                 order: 'desc',
                 page: 1,
-                status: 'Delivered',
+                status: '3',
             });
 
             const productData = await listProductsForAdmin(_id, accessToken, {
@@ -80,13 +79,11 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
 
             const userData = await listUserForAdmin(_id, accessToken, {
                 search: '',
-                sortBy: 'point',
                 order: 'desc',
                 limit: 1000,
                 page: 1,
                 role: 'user',
             });
-
 
             setItems({
                 ...items,
@@ -107,53 +104,16 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
 
         setIsLoading(false);
     };
-
-    const vendorInit = async () => {
-        setError('');
-        setIsLoading(true);
-
-        try {
-            const orderData = await listOrdersByStore(
-                _id,
-                accessToken,
-                {
-                    search: '',
-                    limit: 1000,
-                    sortBy: 'createdAt',
-                    order: 'desc',
-                    page: 1,
-                    status: 'Delivered',
-                },
-                storeId,
-            );
-
-
-            setItems({
-                ...items,
-                order: orderData.orders.reverse(),
-            });
-
-            setSizes({
-                ...sizes,
-                order: orderData.size,
-            });
-        } catch (e) {
-            setError('Server Error');
-        }
-
-        setIsLoading(false);
-    };
-
     useEffect(() => {
-        if (by === 'admin') adminInit();
-        else vendorInit();
-    }, [by, storeId]);
+        adminInit();
+    }, [by]);
 
     return (
         <div className="position-relative">
             {isloading && <Loading />}
             {error && <Error msg={error} />}
             <div className="container-fluid px-2">
+
                 <div className="row">
                     {by === 'admin' && (
                         <>
@@ -177,32 +137,7 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
                                         {sizes.user}
                                     </span>
                                     <span className="ms-1 res-hide-lg">
-                                        Users
-                                    </span>
-                                </button>
-                            </div>
-
-                            <div className="col-md-3 col-6">
-                                <button
-                                    type="button"
-                                    className={`btn ${
-                                        options.flag === 'store'
-                                            ? 'btn-golden'
-                                            : 'btn-outline-golden'
-                                    } btn-lg ripple w-100 py-4 mb-2`}
-                                    onClick={() =>
-                                        setOptions({
-                                            ...options,
-                                            flag: 'store',
-                                        })
-                                    }
-                                >
-                                    <i className="fas fa-store"></i>
-                                    <span className="ms-3 res-hide">
-                                        {sizes.store}
-                                    </span>
-                                    <span className="ms-1 res-hide-lg">
-                                        Stores
+                                        Khách hàng
                                     </span>
                                 </button>
                             </div>
@@ -228,7 +163,7 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
                             <span className="ms-3 res-hide">
                                 {sizes.product}
                             </span>
-                            <span className="ms-1 res-hide-lg">Products</span>
+                            <span className="ms-1 res-hide-lg">Sản phẩm</span>
                         </button>
                     </div>
 
@@ -249,7 +184,7 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
                         >
                             <i className="fas fa-clipboard"></i>
                             <span className="ms-3 res-hide">{sizes.order}</span>
-                            <span className="ms-1 res-hide-lg">Orders</span>
+                            <span className="ms-1 res-hide-lg">Đơn hàng</span>
                         </button>
                     </div>
                 </div>
@@ -257,6 +192,7 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
 
             <div className="container-fluid px-2">
                 <div className="row">
+
                     <div className="col-xl-8 col-lg-6">
                         <form className="d-flex">
                             {options.flag !== 'product' ? (
@@ -264,28 +200,28 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
                                     <DropDownMenu
                                         listItem={[
                                             {
-                                                label: 'Hour',
+                                                label: 'Giờ',
                                                 value: 'hours',
                                                 icon: (
                                                     <i className="far fa-clock"></i>
                                                 ),
                                             },
                                             {
-                                                label: 'Day',
+                                                label: 'Ngày',
                                                 value: 'date',
                                                 icon: (
                                                     <i className="fas fa-calendar-day"></i>
                                                 ),
                                             },
                                             {
-                                                label: 'Month',
+                                                label: 'Tháng',
                                                 value: 'month',
                                                 icon: (
                                                     <i className="fas fa-calendar-alt"></i>
                                                 ),
                                             },
                                             {
-                                                label: 'Year',
+                                                label: 'Năm',
                                                 value: 'year',
                                                 icon: (
                                                     <i className="fas fa-calendar-minus"></i>
@@ -299,7 +235,7 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
                                                 by: value,
                                             })
                                         }
-                                        label="Statistics by"
+                                        label="Thống kê theo"
                                         borderBtn={true}
                                     />
                                 </div>
@@ -308,19 +244,19 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
                                     <DropDownMenu
                                         listItem={[
                                             {
-                                                label: '6 Products',
+                                                label: '6 sản phẩm',
                                                 value: 6,
                                             },
                                             {
-                                                label: '10 Products',
+                                                label: '10 sản phẩm',
                                                 value: 10,
                                             },
                                             {
-                                                label: '50 Products',
+                                                label: '50 sản phẩm',
                                                 value: 50,
                                             },
                                             {
-                                                label: '100 Products',
+                                                label: '100 sản phẩm',
                                                 value: 100,
                                             },
                                         ]}
@@ -331,7 +267,7 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
                                                 sliceEnd: value,
                                             })
                                         }
-                                        label="Statistics by"
+                                        label="Thống kê theo"
                                         borderBtn={true}
                                     />
                                 </div>
@@ -368,12 +304,24 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
                                             type: value,
                                         })
                                     }
-                                    label="Chart type"
+                                    label="Biểu đồ"
                                     borderBtn={true}
                                 />
                             </div>
-                        </form>
 
+                        </form>
+                        <div className="example-config">
+                            <button
+                            className="exportPDF"
+                            onClick={() => {
+                                if (pdfExportComponent.current) {
+                                pdfExportComponent.current.save();
+                                }
+                            }}
+                            >
+                                Xuất file báo cáo
+                            </button>
+                        </div>
                         <div className="mt-2">
                             {options.type === 'line' && (
                                 <LineChart
@@ -419,9 +367,6 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
                                                 options.flag.substring(1)}
                                         </th>
                                         <th scope="col">
-                                            {options.flag === 'user' && 'Point'}
-                                            {options.flag === 'store' &&
-                                                'Point'}
                                             {options.flag === 'product' &&
                                                 'Sold'}
                                             {options.flag === 'order' && 'Date'}
@@ -462,10 +407,6 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
                                                     )}
                                                 </td>
                                                 <td>
-                                                    {options.flag === 'user' &&
-                                                        item.point}
-                                                    {options.flag === 'store' &&
-                                                        item.point}
                                                     {options.flag ===
                                                         'product' && item.sold}
                                                     {options.flag ===
@@ -487,20 +428,127 @@ const ListStatisticsItems = ({ by = 'admin', storeId = '' }) => {
                                 to={`/${by}/${
                                     by === 'admin'
                                         ? options.flag
-                                        : options.flag + 's/' + storeId
+                                        : options.flag + 's/' 
                                 }`}
                                 className="link-hover"
                             >
                                 <span className="me-2 res-hide">
-                                    Go to {options.flag} manager
+                                    Trở về
                                 </span>
                                 <i className="fas fa-external-link-alt"></i>
                             </Link>
                         </div>
                     </div>
+                
                 </div>
             </div>
+        {/* --------------------------------Export file PDF------------------------------------------ */}
+
+        <div
+            style={{
+            position: "absolute",
+            left: "-1000px",
+            top: 0,
+            }}
+        >
+            <PDFExport paperSize="auto" margin="1cm" ref={pdfExportComponent}>
+            <div
+                style={{
+                width: "500px",
+                }}
+            >
+                <h4 className="text-center text-uppercase">Bao cao doanh thu</h4>
+                <DoughnutChart
+                    by={options.by}
+                    items={items[options.flag]}
+                    groupBy={groupByFunc[options.flag]}
+                    title={titles[options.flag]}
+                    sliceEnd={options.sliceEnd}
+                />
+
+            </div>
+            <div className="table-scroll my-2">
+                            <table className="table align-middle table-hover table-sm text-center">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">
+                                            {options.flag[0].toUpperCase() +
+                                                options.flag.substring(1)}
+                                        </th>
+                                        <th scope="col">
+                                            {options.flag === 'product' &&
+                                                'Sold'}
+                                            {options.flag === 'order' && 'Date'}
+                                        </th>
+                                        <th scope="col">
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {((options.flag === 'order') ?
+                                        items[options.flag].slice(-6).reverse() :
+                                        items[options.flag].slice(0,6))
+                                        .map((item, index) => (
+                                            <tr key={index}>
+                                                <th scope="row">{index}</th>
+                                                <td
+                                                    className="text-start"
+                                                    style={{
+                                                        whiteSpace: 'normal',
+                                                    }}
+                                                >
+                                                    {options.flag ===
+                                                        'user' && (
+                                                        <UserSmallCard
+                                                            user={item}
+                                                        />
+                                                    )}
+
+                                                    {options.flag ===
+                                                        'product' && (
+                                                        <ProductSmallCard
+                                                            product={item}
+                                                        />
+                                                    )}
+                                                    {options.flag ===
+                                                        'order' && (
+                                                        <small>
+                                                            {item._id}
+                                                        </small>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    {options.flag ===
+                                                        'product' && item.sold}
+                                                    {options.flag ===
+                                                        'order' && (
+                                                        <small>
+                                                            {humanReadableDate(
+                                                                item.createdAt,
+                                                            )}
+                                                        </small>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    <small>         
+                                                    {item.amount &&
+                                            formatPrice(
+                                                item.amount
+                                                    .$numberDecimal,
+                                            )}{' '}
+                                        VND
+                                                    </small>     
+                                                </td>
+                                            </tr>
+                                        ))}
+                                </tbody>
+                            </table>
+                        </div>
+            </PDFExport>
         </div>
+    </div>
     );
 };
 

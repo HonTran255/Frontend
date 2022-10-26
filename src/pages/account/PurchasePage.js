@@ -20,7 +20,7 @@ const PurchasePage = () => {
                         <i className="fas fa-clipboard"></i>
                     </button>
 
-                    <small className="cus-tooltip-msg">Processing Orders</small>
+                    <small className="cus-tooltip-msg">Đơn hàng đang xử lý</small>
                 </div>
 
                 <div className="position-relative d-inline-block">
@@ -34,7 +34,7 @@ const PurchasePage = () => {
                         <i className="fas fa-clipboard-check"></i>
                     </button>
 
-                    <small className="cus-tooltip-msg">Processed Orders</small>
+                    <small className="cus-tooltip-msg">Đơn hàng đã xử lý</small>
                 </div>
             </div>
 
@@ -42,8 +42,8 @@ const PurchasePage = () => {
                 heading={true}
                 status={
                     flag
-                        ? 'Not processed|Processing|Shipped'
-                        : 'Delivered|Cancelled'
+                        ? '0|1|2'
+                        : '3|4'
                 }
             />
         </AccountLayout>

@@ -8,13 +8,13 @@ const OrderPaymentLabel = ({ isPaidBefore = false, detail = true }) => (
         ) : (
             <span className="badge bg-primary cus-tooltip">
                 <i className="fas fa-people-carry"></i>
-                {detail && <span className="ms-2">on delivery</span>}
+                {detail && <span className="ms-2">Thanh toán trực tiếp</span>}
             </span>
         )}
         {isPaidBefore ? (
-            <small className="cus-tooltip-msg">Payment with paypal</small>
+            <small className="cus-tooltip-msg">Thanh toán với Paypal</small>
         ) : (
-            <small className="cus-tooltip-msg">Payment on delivery</small>
+            <small className="cus-tooltip-msg">Thanh toán khi nhận hàng</small>
         )}
     </span>
 );

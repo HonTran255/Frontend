@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { getToken } from '../../../apis/auth';
 import { createDelivery } from '../../../apis/delivery';
-import { regexTest, numberTest } from '../../../helper/test';
+import { regexTest, numberTest } from '../../../helpers/test';
 import TextArea from '../../ui/TextArea';
 import Input from '../../ui/Input';
 import Loading from '../../ui/Loading';
@@ -111,7 +111,7 @@ const AdminCreateDeliveryForm = ({ onRun = () => {} }) => {
                 <div className="col-12">
                     <Input
                         type="text"
-                        label="Delivery unit name"
+                        label="Tên"
                         value={delivery.name}
                         isValid={delivery.isValidName}
                         feedback="Please provide a valid delivery name."

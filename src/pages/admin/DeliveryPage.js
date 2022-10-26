@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import AdminLayout from '../../components/layout/AdminLayout';
 import AdminDeliveriesTable from '../../components/table/AdminDeliveriesTable';
 
-const DeliveryPage = (props) => {
+const DeliveryPage = () => {
     const user = useSelector((state) => state.account.user);
     return (
         <AdminLayout user={user}>

@@ -1,5 +1,5 @@
 const RatingInput = ({
-    label = 'Rating',
+    label = 'Đánh giá',
     value = 0,
     isValid = true,
     feedback = 'Please provide a valid value',

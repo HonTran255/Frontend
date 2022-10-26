@@ -32,17 +32,16 @@ export const totalProducts = (items = [])=> {
 };
 
 export const totalDelivery = (delivery = {}) => {
-    let deliveryPrice, amount;
+    let deliveryPrice
 
     try {
         deliveryPrice = delivery.price.$numberDecimal;
-        amount = 30.000;
     } catch (e) {
         deliveryPrice = 0;
-        amount = 30.000;
     }
+
     return {
-        deliveryPrice, amount
+        deliveryPrice
     };
 };
 

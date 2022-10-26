@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getToken } from '../../../apis/auth';
 import { updateDelivery } from '../../../apis/delivery';
-import { regexTest, numberTest } from '../../../helper/test';
+import { regexTest, numberTest } from '../../../helpers/test';
 import TextArea from '../../ui/TextArea';
 import Input from '../../ui/Input';
 import Loading from '../../ui/Loading';

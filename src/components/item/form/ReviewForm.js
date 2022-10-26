@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getToken } from '../../../apis/auth';
 import { reviewProduct } from '../../../apis/review';
-import { numberTest, regexTest } from '../../../helper/test';
+import { numberTest, regexTest } from '../../../helpers/test';
 import Loading from '../../ui/Loading';
 import Error from '../../ui/Error';
 import Success from '../../ui/Success';
@@ -9,14 +9,13 @@ import ConfirmDialog from '../../ui/ConfirmDialog';
 import TextArea from '../../ui/TextArea';
 import RatingInput from '../../ui/RatingInput';
 
-const ReviewForm = ({ storeId = '', orderId = '', productId = '', onRun }) => {
+const ReviewForm = ({ orderId = '', productId = '', onRun }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isConfirming, setIsConfirming] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
     const [review, setReview] = useState({
-        storeId,
         orderId,
         productId,
         rating: 1,
@@ -30,11 +29,10 @@ const ReviewForm = ({ storeId = '', orderId = '', productId = '', onRun }) => {
     useEffect(() => {
         setReview({
             ...review,
-            storeId,
             orderId,
             productId,
         });
-    }, [storeId, productId, orderId]);
+    }, [productId, orderId]);
 
     const handleChange = (name, isValidName, value) => {
         setReview({
@@ -54,7 +52,6 @@ const ReviewForm = ({ storeId = '', orderId = '', productId = '', onRun }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (
-            !review.storeId ||
             !review.orderId ||
             !review.productId ||
             !review.rating
@@ -103,7 +100,7 @@ const ReviewForm = ({ storeId = '', orderId = '', productId = '', onRun }) => {
             {isLoading && <Loading />}
             {isConfirming && (
                 <ConfirmDialog
-                    title="Review & rate"
+                    title="Đánh giá và bình luận"
                     onSubmit={onSubmit}
                     onClose={() => setIsConfirming(false)}
                 />
@@ -115,10 +112,10 @@ const ReviewForm = ({ storeId = '', orderId = '', productId = '', onRun }) => {
             <form className="row mb-2" onSubmit={handleSubmit}>
                 <div className="col-12">
                     <RatingInput
-                        label="Rate"
+                        label="Đánh giá"
                         value={review.rating}
                         isValid={review.isValidRating}
-                        feedback="Please provide a valid rating."
+                        feedback="Hãy đánh giá sản phẩm."
                         onChange={(value) =>
                             handleChange('rating', 'isValidRating', value)
                         }
@@ -131,7 +128,7 @@ const ReviewForm = ({ storeId = '', orderId = '', productId = '', onRun }) => {
                         label="Content"
                         value={review.content}
                         isValid={review.isValidContent}
-                        feedback="Please provide a valid content."
+                        feedback="Hãy bình luận về sản phẩm."
                         validator="nullable"
                         onChange={(value) =>
                             handleChange('content', 'isValidContent', value)

@@ -1,42 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getToken } from '../../apis/auth';
-import { userCancelOrder } from '../../apis/order';
-import { calcTime } from '../../helpers/calcTime';
+import { adminUpdateStatusOrder } from '../../apis/order';
 import Loading from '../ui/Loading';
 import Error from '../ui/Error';
 import ConfirmDialog from '../ui/ConfirmDialog';
+import DropDownMenu from '../ui/DropDownMenu';
 
-const UserCancelOrderButton = ({
-    orderId = '',
-    status = '',
-    detail = true,
-    createdAt = '',
-    onRun,
-}) => {
+const AdminUpdateOrderStatusButton = ({ orderId = '', status = '', onRun }) => {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isConfirming, setIsConfirming] = useState(false);
+    const [statusValue, setStatusValue] = useState(status);
 
     const { _id, accessToken } = getToken();
 
-    const handleCancelOrder = () => {
+    useEffect(() => {
+        setStatusValue(status);
+    }, [status]);
+
+    const handleUpdate = (value) => {
+        setStatusValue(value);
         setIsConfirming(true);
     };
 
     const onSubmit = () => {
         setError('');
         setIsLoading(true);
-        const value = { status: '4' };
-        userCancelOrder(_id, accessToken, value, orderId)
+        const value = { status: statusValue };
+        adminUpdateStatusOrder(_id, accessToken, value, orderId)
             .then((data) => {
                 if (data.error) {
                     setError(data.error);
                     setTimeout(() => {
                         setError('');
                     }, 3000);
-                } else {
-                    if (onRun) onRun();
-                }
+                } else if (onRun) onRun();
                 setIsLoading(false);
             })
             .catch((error) => {
@@ -54,31 +52,26 @@ const UserCancelOrderButton = ({
             {error && <Error msg={error} />}
             {isConfirming && (
                 <ConfirmDialog
-                    title="Hủy đơn hàng"
-                    color="danger"
+                    title="Update Order Status"
                     onSubmit={onSubmit}
                     onClose={() => setIsConfirming(false)}
                 />
             )}
-            <div className="d-inline-block cus-tooltip">
-                <button
-                    type="button"
-                    className="btn btn-outline-danger ripple"
-                    disabled={
-                        status !== '0' || calcTime(createdAt) >= 1
-                    }
-                    onClick={handleCancelOrder}
-                >
-                    <i className="fas fa-ban"></i>
-                    {detail && <span className="ms-2">Hủy đơn</span>}
-                </button>
-            </div>
 
-            {(!status === '0' || calcTime(createdAt) >= 1) && (
-                <small className="cus-tooltip-msg">Không thể hủy đơn</small>
-            )}
+            <DropDownMenu
+                listItem={[
+                    { label: 'Chưa xử lý', value: '0' },
+                    { label: 'Đã xác nhận', value: '1' },
+                    { label: 'Đang giao hàng', value: '2' },
+                    { label: 'Đã nhận hàng', value: '3' },
+                ]}
+                size="small"
+                value={statusValue}
+                setValue={(value) => handleUpdate(value)}
+                borderBtn={true}
+            />
         </div>
     );
 };
 
-export default UserCancelOrderButton;
+export default AdminUpdateOrderStatusButton;

@@ -10,7 +10,7 @@ import CategoryPage from "./pages/core/CategoryPage";
 import ProductDetailPage from "./pages/product/DetailPage";
 
 //admin
-// import AdminDashboardPage from './pages/admin/DashboardPage';
+import AdminDashboardPage from './pages/admin/DashboardPage';
 import AdminUserPage from './pages/admin/UserPage';
 import AdminCategoryPage from './pages/admin/CategoryPage';
 import AdminCreateCategoryPage from './pages/admin/CreateCategoryPage';
@@ -18,16 +18,19 @@ import AdminEditCategoryPage from './pages/admin/EditCategoryPage';
 import AdminProductPage from './pages/admin/ProductPage'
 import AdminCreateProductPage from './pages/admin/CreateProductPage';
 import AdminEditProductPage from './pages/admin/EditProductPage';
-
+import AdminOrderPage from './pages/admin/OrderPage';
+import AdminOrderDetailPage from './pages/admin/OrderDetailPage';
+import AdminDeliveryPage from './pages/admin/DeliveryPage';
 
 //account
 import ProfilePage from "./pages/account/ProfilePage";
 import AddressesPage from "./pages/account/AddressesPage";
 import FollowingPage from "./pages/account/FollowingPage"; 
 import ChangePasswordPage from "./pages/account/ChangePasswordPage";
-// import PurchasePage from "./pages/account/PurchasePage";
+import PurchasePage from "./pages/account/PurchasePage";
 import CartPage from "./pages/account/CartPage";
-// import OrderDetailPage from "./pages/account/OrderDetailPage";
+import OrderDetailPage from "./pages/account/OrderDetailPage";
+
 
 function App() {
   return (
@@ -51,12 +54,13 @@ function App() {
             element={< ProductDetailPage/>}
           />
 
+
     {/* admin */}
-          {/* <Route
-            path="/admin/user"
+          <Route
+            path="/admin/dashboard"
             exact
             element= {<AdminDashboardPage/>}
-          />  */}
+          /> 
           <Route
             path="/admin/user"
             exact
@@ -120,6 +124,33 @@ function App() {
               </AdminRoute>
             }
           />
+          <Route
+            path="/admin/order"
+            exact
+            element= {
+              <AdminRoute>
+                <AdminOrderPage/>
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/order/detail/:orderId"
+            exact
+            element= {
+              <AdminRoute>
+                <AdminOrderDetailPage/>
+              </AdminRoute>
+            }
+          />
+                    <Route
+            path="/admin/delivery"
+            exact
+            element= {
+              <AdminRoute>
+                <AdminDeliveryPage/>
+              </AdminRoute>
+            }
+          />
     {/* account */}
           <Route
             path="/account/profile"
@@ -139,11 +170,25 @@ function App() {
               </PrivateRoute>
           }
           />
-          {/* <Route
+          <Route
+            path="/account/purchase"
+            exact
+            element=
+            { <PrivateRoute>
+                <PurchasePage/>
+              </PrivateRoute>
+            }
+          /> 
+          
+          <Route
             path="/account/purchase/detail/:orderId"
             exact
-            element={<OrderDetailPage/>}
-          /> */}
+            element=
+            { <PrivateRoute>
+                <OrderDetailPage/>
+              </PrivateRoute>
+            }
+          />
 
           <Route
             path="/account/following"
@@ -170,11 +215,6 @@ function App() {
                 </PrivateRoute>
               }
           />
-          {/* <Route
-            path="/account/purchase"
-            exact
-            component={<PurchasePage/>}
-          /> */}
           </Routes>
         </BrowserRouter>
     </div>

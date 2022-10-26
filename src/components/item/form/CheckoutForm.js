@@ -3,23 +3,23 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getToken } from '../../../apis/auth';
 import { createOrder } from '../../../apis/order';
-import { listActiveDeliveries } from '../../../apis/delivery';
 import Loading from '../../ui/Loading';
 import Error from '../../ui/Error';
 import ConfirmDialog from '../../ui/ConfirmDialog';
+import { listActiveDeliveries } from '../../../apis/delivery';
 import UserAddAddressItem from '../../item/UserAddAddressItem';
 import useUpdateDispatch from '../../../hooks/useUpdateDispatch';
 import { regexTest } from '../../../helpers/test';
 import { convertVNDtoUSD } from '../../../helpers/formatPrice';
 import {
-    totalDelivery,
     totalProducts,
+    totalDelivery
 } from '../../../helpers/total';
 import { formatPrice } from '../../../helpers/formatPrice';
 import Logo from '../../layout/menu/Logo';
 import Input from '../../ui/Input';
 import DropDownMenu from '../../ui/DropDownMenu';
-// import { PayPalButton } from 'react-paypal-button-v2';
+import {PayPalScriptProvider, PayPalButtons} from "@paypal/react-paypal-js";
 
 const CLIENT_ID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
 const CheckoutForm = ({
@@ -34,35 +34,44 @@ const CheckoutForm = ({
 
     const [updateDispatch] = useUpdateDispatch();
     const history = useNavigate();
-
     const {
         addresses,
         phone,
     } = useSelector((state) => state.account.user);
   
     const [order, setOrder] = useState({});
-
+    const [deliveries, setDeliveries] = useState([]);
     const init = async () => {
         try {
+            const res = await listActiveDeliveries();
 
+            setDeliveries(res.deliveries);
+
+            const { deliveryPrice} = totalDelivery(
+                res.deliveries[0]
+            );
 
             const { totalPrice, totalPromotionalPrice } =
                 totalProducts(items);
-            const amount = totalPromotionalPrice;
+
             setOrder({
                 phone,
                 address: addresses[0],
                 isValidPhone: true,
                 cartId,
+                delivery: res.deliveries[0],
+                deliveryId: res.deliveries[0]._id,
+                deliveryPrice,
                 totalPrice,
                 totalPromotionalPrice,
-                amount
+                amount: parseInt(totalPromotionalPrice)+ parseInt(deliveryPrice)
             });
+
         } catch (e) {
             setError('Server Error');
         }
     };
-
+const cvAmount = parseFloat(convertVNDtoUSD(order.amount)) 
     useEffect(() => {
         init();
     }, [cartId, userId, items, addresses, phone]);
@@ -116,16 +125,16 @@ const CheckoutForm = ({
         const { _id, accessToken } = getToken();
 
         const {
+            deliveryId,
             phone,
             address,
-            deliveryId,
             amount
         } = order;
 
         const orderBody = {
+            deliveryId,
             phone,
             address,
-            deliveryId,
             amount,
             isPaidBefore: false,
         };
@@ -150,96 +159,96 @@ const CheckoutForm = ({
             });
     };
 
-    const handlePayPalCreateOrder = (data, actions) => {
-        const {
-            cartId,
-            deliveryId,
-            address,
-            phone,
-            amount
-        } = order;
+    // const handlePayPalCreateOrder = (data, actions) => {
+    //     const {
+    //         cartId,
+    //         deliveryId,
+    //         address,
+    //         phone,
+    //         amount
+    //     } = order;
 
-        if (
-            !cartId ||
-            !deliveryId ||
-            !address ||
-            !phone ||
-            !amount
-        ) {
-            setOrder({
-                ...order,
-                isValidPhone: regexTest('phone', order.phone),
-            });
-            return;
-        }
+    //     if (
+    //         !cartId ||
+    //         !deliveryId ||
+    //         !address ||
+    //         !phone ||
+    //         !amount
+    //     ) {
+    //         setOrder({
+    //             ...order,
+    //             isValidPhone: regexTest('phone', order.phone),
+    //         });
 
-        if (!order.isValidPhone) return;
-        else {
-            return actions.order.create({
-                purchase_units: [
-                    {
-                        amount: {
-                            currency_code: 'USD',
-                            value: convertVNDtoUSD(order.amount),
-                        },
-                    },
-                ],
-                application_context: {
-                    shipping_preference: 'NO_SHIPPING',
-                },
-            });
-        }
-    };
+    //     }
 
-    const handlePayPalApprove = (data, actions) => {
-        return actions.order.capture().then(function (details) {
-            // Show a success message to your buyer
-            // alert("Transaction completed by " + details.payer.name.given_name);
-            // OPTIONAL: Call your server to save the transaction
-            const { _id, accessToken } = getToken();
+    //     if (!order.isValidPhone) return;
+    //     else{
+    //         return actions.order.create({
+    //             purchase_units: [
+    //                 {
+    //                     amount: {
+    //                         currency_code: 'USD',
+    //                         value: "12",
+    //                     },
+    //                 },
+    //             ],
+    //             application_context: {
+    //                 shipping_preference: 'NO_SHIPPING',
+    //             },
+    //         })
+    //         .then((orderId) => {
+                    
+    //             return orderId;
+    //         });
+    //     }
+    // };
 
-            const {
-                phone,
-                address,
-                deliveryId,
-                amount
-            } = order;
+    // const handlePayPalApprove = (data, actions) => {
+    //     return actions.order.capture().then(function () {
+    //         const { _id, accessToken } = getToken();
 
-            const orderBody = {
-                phone,
-                address,
-                deliveryId,
-                amount,
-                isPaidBefore: true,
-            };
+    //         const {
+    //             phone,
+    //             address,
+    //             deliveryId,
+    //             amount
+    //         } = order;
 
-            setError('');
-            setIsLoading(true);
-            createOrder(_id, accessToken, cartId, orderBody)
-                .then((data) => {
-                    if (data.error) setError(data.error);
-                    else {
-                        updateDispatch('account', data.user);
-                        history.push('/account/purchase');
-                    }
-                    setIsLoading(false);
-                })
-                .catch((error) => {
-                    setError('Server Error');
-                    setTimeout(() => {
-                        setError('');
-                    }, 3000);
-                    setIsLoading(false);
-                });
-        });
-    };
+    //         const orderBody = {
+    //             phone,
+    //             address,
+    //             deliveryId,
+    //             amount,
+    //             isPaidBefore: true,
+    //         };
 
+    //         setError('');
+    //         setIsLoading(true);
+    //         createOrder(_id, accessToken, cartId, orderBody)
+    //             .then((data) => {
+    //                 if (data.error) setError(data.error);
+    //                 else {
+    //                     updateDispatch('account', data.user);
+    //                     history('/account/purchase');
+    //                 }
+    //                 setIsLoading(false);
+    //             })
+    //             .catch((error) => {
+    //                 setError('Server Error');
+    //                 setTimeout(() => {
+    //                     setError('');
+    //                 }, 3000);
+    //                 setIsLoading(false);
+    //             });
+    //     });
+    // };
     return (
         <div className="position-relative">
             {isloading && <Loading />}
             {isConfirming && (
                 <ConfirmDialog
-                    title="Only order"
+                    title="Thanh toán"
                     onSubmit={onSubmit}
                     onClose={() => setIsConfirming(false)}
                 />
@@ -350,15 +359,46 @@ const CheckoutForm = ({
                         </div>
 
                         <div className="col-12 mt-4">
-                            <h6>Đơn vị vận chuyển</h6>
-                                <p>Giao hàng tiết kiệm</p> 
+                            {deliveries && deliveries.length > 0 && (
+                                <DropDownMenu
+                                    listItem={
+                                        deliveries &&
+                                        deliveries.map((d, i) => {
+                                            const newD = {
+                                                value: d,
+                                                label:
+                                                    d.name +
+                                                    ' (' +
+                                                    d.price.$numberDecimal +
+                                                    ' VND)',
+                                            };
+                                            return newD;
+                                        })
+                                    }
+                                    value={order.delivery}
+                                    setValue={(delivery) => {
+                                        const {
+                                            deliveryPrice
+                                        } = totalDelivery(delivery);
+                                        setOrder({
+                                            ...order,
+                                            delivery,
+                                            deliveryId: delivery._id,
+                                            deliveryPrice,
+                                            amount: parseInt(order.totalPromotionalPrice) + parseInt(deliveryPrice)
+                                        });
+                                    }}
+                                    size="large"
+                                    label="Đơn vị vận chuyển"
+                                />
+                            )}
                         </div>
                     </div>
                 </div>
 
                 <div className="col-xl-4 col-md-6">
                     <div className="my-2 p-2 border border-primary rounded">
-                        <h4 className="text-center">Your order</h4>
+                        <h4 className="text-center">Thông tin thanh toán</h4>
                         <hr />
 
                         <dl className="row">
@@ -385,13 +425,14 @@ const CheckoutForm = ({
                                 <dl className="row">
                                     <dd className="col-sm-6 res-hide">
                                         <p className="text-decoration-line-through text-muted">
-                                            {formatPrice(30000)}{' '}
+                                            {formatPrice(60000)}{' '}
                                             VND
                                         </p>
                                     </dd>
                                     <dd className="col-sm-6">
                                         <h4 className="text-primary fs-5">
-                                            Miễn Phí
+                                        {formatPrice(order.deliveryPrice)}{' '}
+                                            VND
                                         </h4>
                                     </dd>
                                 </dl>
@@ -419,28 +460,86 @@ const CheckoutForm = ({
                             >
                                 Thanh toán
                             </button>
-{/* 
-                            <div style={{ position: 'relative', zIndex: '1' }}>
-                                <PayPalButton
+                           
+                            <div>
+                                <PayPalScriptProvider
                                     options={{
-                                        clientId: CLIENT_ID,
+                                        "client-id": CLIENT_ID
                                     }}
-                                    style={{
-                                        layout: 'horizontal',
-                                        tagline: 'false',
-                                    }}
-                                    createOrder={(data, actions) =>
-                                        handlePayPalCreateOrder(data, actions)
-                                    }
-                                    onApprove={(data, actions) =>
-                                        handlePayPalApprove(data, actions)
-                                    }
-                                    onError={(err) =>
-                                        setError(String(err).slice(0, 300))
-                                    }
-                                    onCancel={() => setIsLoading(false)}
-                                />
-                            </div> */}
+                                >
+                                    {/* <PayPalButtons
+                                        fundingSource="paypal"
+                                        createOrder={(data, actions) =>
+                                            handlePayPalCreateOrder(data, actions)
+                                        }
+                                        onApprove={(data, actions)=>
+                                            handlePayPalApprove(data,actions)
+                                        }
+                                        onError={(err) =>
+                                            setError(String(err).slice(0, 300))
+                                        }
+                                        onCancel={() => setIsLoading(false)}
+                                    /> */}
+                                    <PayPalButtons
+                                        fundingSource="paypal"
+                                        createOrder={(data, actions) => {
+                                            return actions.order
+                                                .create({
+                                                    purchase_units: [
+                                                        {
+                                                            amount: {
+                                                                currency_code: "USD",
+                                                                value: "1",
+                                                            }
+                                                        },
+                                                    ],
+                                                })
+                                                .then((orderId) => {
+                                                    return orderId;
+                                                });
+                                        }}
+                                        onApprove={function (data, actions) {
+                                            return actions.order.capture().then(function () {
+                                                // Your code here after capture the order
+                                                const { _id, accessToken } = getToken();
+
+                                                const {
+                                                    phone,
+                                                    address,
+                                                    deliveryId,
+                                                    amount
+                                                } = order;
+                                    
+                                                const orderBody = {
+                                                    phone,
+                                                    address,
+                                                    deliveryId,
+                                                    amount,
+                                                    isPaidBefore: true,
+                                                };
+                                                setError('');
+                                                setIsLoading(true);
+                                                createOrder(_id, accessToken, cartId, orderBody)
+                                                    .then((data) => {
+                                                        if (data.error) setError(data.error);
+                                                        else {
+                                                            updateDispatch('account', data.user);
+                                                            history('/account/purchase');
+                                                        }
+                                                        setIsLoading(false);
+                                                    })
+                                                    .catch((error) => {
+                                                        setError('Server Error');
+                                                        setTimeout(() => {
+                                                            setError('');
+                                                        }, 3000);
+                                                        setIsLoading(false);
+                                                    });
+                                            });
+                                        }}
+                                    />
+                                </PayPalScriptProvider>
+                            </div>
                         </div>
                     </div>
                 </div>

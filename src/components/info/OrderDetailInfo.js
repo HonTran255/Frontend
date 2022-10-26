@@ -2,25 +2,21 @@ import { useState, useEffect } from 'react';
 import { getToken } from '../../apis/auth';
 import {
     getOrderByUser,
-    getOrderByStore,
     getOrderForAdmin,
 } from '../../apis/order';
-import { humanReadableDate } from '../../helper/humanReadable';
-import { formatPrice } from '../../helper/formatPrice';
+import { humanReadableDate } from '../../helpers/humanReadable';
+import { formatPrice } from '../../helpers/formatPrice';
 import Loading from '../ui/Loading';
 import Error from '../ui/Error';
 import OrderStatusLabel from '../label/OrderStatusLabel';
 import Paragraph from '../ui/Paragraph';
 import UserSmallCard from '../card/UserSmallCard';
-import StoreSmallCard from '../card/StoreSmallCard';
 import ListOrderItems from '../list/ListOrderItems';
-import VendorUpdateOrderStatus from '../button/VendorUpdateOrderStatus';
 import AdminUpdateOrderStatus from '../button/AdminUpdateOrderStatus';
 import UserCancelOrderButton from '../button/UserCancelOrderButton';
 
 const OrderDetailInfo = ({
     orderId = '',
-    storeId = '',
     by = 'user',
     isEditable = false,
 }) => {
@@ -35,18 +31,7 @@ const OrderDetailInfo = ({
     const init = () => {
         setError('');
         setIsLoading(true);
-        if (by === 'store')
-            getOrderByStore(_id, accessToken, orderId, storeId)
-                .then((data) => {
-                    if (data.error) setError(data.error);
-                    else setOrder(data.order);
-                    setIsLoading(false);
-                })
-                .catch((error) => {
-                    setError('Server Error');
-                    setIsLoading(false);
-                });
-        else if (by === 'admin')
+        if (by === 'admin')
             getOrderForAdmin(_id, accessToken, orderId)
                 .then((data) => {
                     if (data.error) setError(data.error);
@@ -72,7 +57,7 @@ const OrderDetailInfo = ({
 
     useEffect(() => {
         init();
-    }, [orderId, storeId, by, run]);
+    }, [orderId, by, run]);
 
     return (
         <div className="position-relative">
@@ -83,18 +68,14 @@ const OrderDetailInfo = ({
 
                 {(!isEditable ||
                     (isEditable &&
-                        by === 'store' &&
-                        order.status !== 'Not processed' &&
-                        order.status !== 'Processing') ||
-                    (isEditable &&
                         by === 'admin' &&
-                        order.status !== 'Shipped')) && (
+                        order.status !== '2')) && (
                     <span className="fs-6 mx-4 mb-2">
                         <OrderStatusLabel status={order.status} />
                     </span>
                 )}
 
-                {by === 'user' && order.status === 'Not processed' && (
+                {by === 'user' && order.status === '0' && (
                     <div className="mx-4 mb-2">
                         <UserCancelOrderButton
                             orderId={order._id}
@@ -105,25 +86,9 @@ const OrderDetailInfo = ({
                         />
                     </div>
                 )}
-
-                {isEditable &&
-                    by === 'store' &&
-                    (order.status === 'Not processed' ||
-                        order.status === 'Processing') && (
-                        <div className="mx-4 mb-2">
-                            <VendorUpdateOrderStatus
-                                storeId={storeId}
-                                orderId={orderId}
-                                status={order.status}
-                                onRun={() => setRun(!run)}
-                            />
-                        </div>
-                    )}
-
-                {isEditable && by === 'admin' && order.status === 'Shipped' && (
+                {isEditable && by === 'admin' &&  order.status !== '4' &&(
                     <div className="mx-4 mb-2">
-                        <AdminUpdateOrderStatus
-                            storeId={storeId}
+                        <AdminUpdateOrderStatus                        
                             orderId={orderId}
                             status={order.status}
                             onRun={() => setRun(!run)}
@@ -138,15 +103,8 @@ const OrderDetailInfo = ({
                 <div className="row py-2 border border-primary rounded-3">
                     <div className="col-sm-6">
                         <Paragraph
-                            label="Created at"
+                            label="Tạo lúc"
                             value={humanReadableDate(order.createdAt)}
-                        />
-                    </div>
-
-                    <div className="col-sm-6">
-                        <Paragraph
-                            label="Seller"
-                            value={<StoreSmallCard store={order.storeId} />}
                         />
                     </div>
                 </div>
@@ -156,27 +114,27 @@ const OrderDetailInfo = ({
                 <div className="row py-2 border border-primary rounded-3">
                     <div className="col-sm-6">
                         <Paragraph
-                            label="Receiver"
+                            label="Người nhận"
                             value={<UserSmallCard user={order.userId} />}
                         />
                     </div>
 
                     <div className="col-sm-6">
-                        <Paragraph label="Phone" value={order.phone} />
+                        <Paragraph label="Số điện thoại" value={order.phone} />
                     </div>
 
                     <div className="col-12">
-                        <Paragraph label="To address" value={order.address} />
+                        <Paragraph label="Đến địa chỉ" value={order.address} />
                     </div>
                 </div>
             </div>
 
             <div className="container-fluid mb-2">
                 <div className="row py-2 border border-primary rounded-3">
-                    {order.deliveryId && (
+                {order.deliveryId && (
                         <div className="col-12">
                             <Paragraph
-                                label="Delivery unit"
+                                label="Đơn vị vận chuyển"
                                 value={
                                     <span>
                                         {order.deliveryId.name} -{' '}
@@ -187,14 +145,15 @@ const OrderDetailInfo = ({
                             />
                         </div>
                     )}
+                    
 
                     <div className="col-12">
                         <Paragraph
-                            label="Payment"
+                            label="Phương thức thanh toán"
                             value={
                                 order.isPaidBefore
-                                    ? 'Online payment'
-                                    : 'Payment on delivery'
+                                    ? 'Thanh toán online'
+                                    : 'Thanh toán trực tiếp'
                             }
                         />
                     </div>
@@ -205,7 +164,6 @@ const OrderDetailInfo = ({
                 <div className="row py-2 border border-primary rounded-3">
                     <ListOrderItems
                         orderId={orderId}
-                        storeId={storeId}
                         by={by}
                         status={order.status}
                     />
@@ -213,12 +171,12 @@ const OrderDetailInfo = ({
                     <div className="col-12 mt-2 d-flex justify-content-end">
                         <div className="me-4">
                             <Paragraph
-                                label="Final total (include discounts)"
+                                label="Tổng tiền thanh toán"
                                 value={
                                     <span className="text-primary fw-bold fs-5">
                                         {formatPrice(
-                                            order.amountFromUser &&
-                                                order.amountFromUser
+                                            order.amount &&
+                                                order.amount
                                                     .$numberDecimal,
                                         )}{' '}
                                         VND

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { groupByDate } from '../../helper/groupBy';
-import { randomColorsArray } from '../../helper/color';
+import { groupByDate } from '../../helpers/groupBy';
+import { randomColorsArray } from '../../helpers/color';
 import { Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);

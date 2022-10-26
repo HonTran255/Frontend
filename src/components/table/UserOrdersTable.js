@@ -91,10 +91,10 @@ const UserOrdersTable = ({ heading = true, status = '' }) => {
         <div className="position-relative">
             {heading && status === 'Not processed|Processing|Shipped' ? (
                 <h4 className="text-center text-uppercase">
-                    Processing Orders
+                    Đơn hàng đang xử lý
                 </h4>
             ) : (
-                <h4 className="text-center text-uppercase">Processed Orders</h4>
+                <h4 className="text-center text-uppercase">Danh sách đơn hàng</h4>
             )}
 
             {isloading && <Loading />}
@@ -106,7 +106,7 @@ const UserOrdersTable = ({ heading = true, status = '' }) => {
                 </div>
 
                 <span className="me-2 text-nowrap res-hide">
-                    {pagination.size || 0} results
+                    {pagination.size || 0} kết quả
                 </span>
             </div>
 
@@ -119,7 +119,7 @@ const UserOrdersTable = ({ heading = true, status = '' }) => {
                                 <SortByButton
                                     currentOrder={filter.order}
                                     currentSortBy={filter.sortBy}
-                                    title="Order"
+                                    title="Mã đơn hàng"
                                     sortBy="_id"
                                     onSet={(order, sortBy) =>
                                         handleSetSortBy(order, sortBy)
@@ -130,7 +130,7 @@ const UserOrdersTable = ({ heading = true, status = '' }) => {
                                 <SortByButton
                                     currentOrder={filter.order}
                                     currentSortBy={filter.sortBy}
-                                    title="Created at"
+                                    title="Đặt lúc"
                                     sortBy="createdAt"
                                     onSet={(order, sortBy) =>
                                         handleSetSortBy(order, sortBy)
@@ -141,51 +141,31 @@ const UserOrdersTable = ({ heading = true, status = '' }) => {
                                 <SortByButton
                                     currentOrder={filter.order}
                                     currentSortBy={filter.sortBy}
-                                    title="Total"
-                                    sortBy="amountFromUser"
+                                    title="Tổng tiền"
+                                    sortBy="amount"
                                     onSet={(order, sortBy) =>
                                         handleSetSortBy(order, sortBy)
                                     }
                                 />
                             </th>
+
                             <th scope="col">
                                 <SortByButton
                                     currentOrder={filter.order}
                                     currentSortBy={filter.sortBy}
-                                    title="Seller"
-                                    sortBy="orderId"
-                                    onSet={(order, sortBy) =>
-                                        handleSetSortBy(order, sortBy)
-                                    }
-                                />
-                            </th>
-                            <th scope="col">
-                                <SortByButton
-                                    currentOrder={filter.order}
-                                    currentSortBy={filter.sortBy}
-                                    title="Delivery"
+                                    title="Phương thức thanh toán"
                                     sortBy="deliveryId"
                                     onSet={(order, sortBy) =>
                                         handleSetSortBy(order, sortBy)
                                     }
                                 />
                             </th>
+
                             <th scope="col">
                                 <SortByButton
                                     currentOrder={filter.order}
                                     currentSortBy={filter.sortBy}
-                                    title="Payment"
-                                    sortBy="isPaidBefore"
-                                    onSet={(order, sortBy) =>
-                                        handleSetSortBy(order, sortBy)
-                                    }
-                                />
-                            </th>
-                            <th scope="col">
-                                <SortByButton
-                                    currentOrder={filter.order}
-                                    currentSortBy={filter.sortBy}
-                                    title="Status"
+                                    title="Trạng thái"
                                     sortBy="status"
                                     onSet={(order, sortBy) =>
                                         handleSetSortBy(order, sortBy)
@@ -213,26 +193,13 @@ const UserOrdersTable = ({ heading = true, status = '' }) => {
                                 </td>
                                 <td>
                                     <small className="text-nowrap">
-                                        {order.amountFromUser &&
+                                        {order.amount &&
                                             formatPrice(
-                                                order.amountFromUser
+                                                order.amount
                                                     .$numberDecimal,
                                             )}{' '}
                                         VND
                                     </small>
-                                </td>
-                                <td>
-                                    {order.deliveryId && (
-                                        <small>
-                                            {order.deliveryId.name}
-                                            <br />
-                                            {formatPrice(
-                                                order.deliveryId.price
-                                                    .$numberDecimal,
-                                            )}{' '}
-                                            VND
-                                        </small>
-                                    )}
                                 </td>
                                 <td>
                                     <small>
@@ -256,7 +223,7 @@ const UserOrdersTable = ({ heading = true, status = '' }) => {
                                     >
                                         <i className="fas fa-info-circle"></i>
                                         <span className="ms-2 res-hide">
-                                            Detail
+                                            Chi tiết
                                         </span>
                                     </Link>
                                 </td>

@@ -2,15 +2,14 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getToken } from '../../apis/auth';
 import { listOrdersForAdmin } from '../../apis/order';
-import { humanReadableDate } from '../../helper/humanReadable';
-import { formatPrice } from '../../helper/formatPrice';
+import { humanReadableDate } from '../../helpers/humanReadable';
+import { formatPrice } from '../../helpers/formatPrice';
 import Pagination from '../ui/Pagination';
 import Loading from '../ui/Loading';
 import Error from '../ui/Error';
 import SortByButton from './sub/SortByButton';
 import OrderStatusLabel from '../label/OrderStatusLabel';
 import OrderPaymentLabel from '../label/OrderPaymentLabel';
-import StoreSmallCard from '../card/StoreSmallCard';
 import UserSmallCard from '../card/UserSmallCard';
 import SearchInput from '../ui/SearchInput';
 
@@ -90,16 +89,10 @@ const AdminOrdersTable = ({ heading = true, status = '' }) => {
 
     return (
         <div className="position-relative">
-            {heading &&
-                (status === '' ? (
-                    <h4 className="text-center text-uppercase">
-                        All Orders In System
-                    </h4>
-                ) : (
-                    <h4 className="text-center text-uppercase">
-                        Delivery Service
-                    </h4>
-                ))}
+             <h4 className="text-center text-uppercase">
+                Tất cả đơn hàng
+            </h4>
+
 
             {isloading && <Loading />}
             {error && <Error msg={error} />}
@@ -110,7 +103,7 @@ const AdminOrdersTable = ({ heading = true, status = '' }) => {
                 </div>
 
                 <span className="me-2 text-nowrap res-hide">
-                    {pagination.size || 0} results
+                    {pagination.size || 0} kết quả
                 </span>
             </div>
 
@@ -123,7 +116,7 @@ const AdminOrdersTable = ({ heading = true, status = '' }) => {
                                 <SortByButton
                                     currentOrder={filter.order}
                                     currentSortBy={filter.sortBy}
-                                    title="Order"
+                                    title="Mã đơn hàng"
                                     sortBy="_id"
                                     onSet={(order, sortBy) =>
                                         handleSetSortBy(order, sortBy)
@@ -134,7 +127,7 @@ const AdminOrdersTable = ({ heading = true, status = '' }) => {
                                 <SortByButton
                                     currentOrder={filter.order}
                                     currentSortBy={filter.sortBy}
-                                    title="Created at"
+                                    title="Tạo lúc"
                                     sortBy="createdAt"
                                     onSet={(order, sortBy) =>
                                         handleSetSortBy(order, sortBy)
@@ -156,7 +149,7 @@ const AdminOrdersTable = ({ heading = true, status = '' }) => {
                                 <SortByButton
                                     currentOrder={filter.order}
                                     currentSortBy={filter.sortBy}
-                                    title="Buyer"
+                                    title="Người mua"
                                     sortBy="userId"
                                     onSet={(order, sortBy) =>
                                         handleSetSortBy(order, sortBy)
@@ -167,40 +160,7 @@ const AdminOrdersTable = ({ heading = true, status = '' }) => {
                                 <SortByButton
                                     currentOrder={filter.order}
                                     currentSortBy={filter.sortBy}
-                                    title="Seller"
-                                    sortBy="storeId"
-                                    onSet={(order, sortBy) =>
-                                        handleSetSortBy(order, sortBy)
-                                    }
-                                />
-                            </th>
-                            <th scope="col">
-                                <SortByButton
-                                    currentOrder={filter.order}
-                                    currentSortBy={filter.sortBy}
-                                    title="Commission"
-                                    sortBy="amountToGD"
-                                    onSet={(order, sortBy) =>
-                                        handleSetSortBy(order, sortBy)
-                                    }
-                                />
-                            </th>
-                            <th scope="col">
-                                <SortByButton
-                                    currentOrder={filter.order}
-                                    currentSortBy={filter.sortBy}
-                                    title="Delivery"
-                                    sortBy="deliveryId"
-                                    onSet={(order, sortBy) =>
-                                        handleSetSortBy(order, sortBy)
-                                    }
-                                />
-                            </th>
-                            <th scope="col">
-                                <SortByButton
-                                    currentOrder={filter.order}
-                                    currentSortBy={filter.sortBy}
-                                    title="Payment"
+                                    title="Phương thức thanh toán"
                                     sortBy="isPaidBefore"
                                     onSet={(order, sortBy) =>
                                         handleSetSortBy(order, sortBy)
@@ -211,7 +171,7 @@ const AdminOrdersTable = ({ heading = true, status = '' }) => {
                                 <SortByButton
                                     currentOrder={filter.order}
                                     currentSortBy={filter.sortBy}
-                                    title="Status"
+                                    title="Trạng thái"
                                     sortBy="status"
                                     onSet={(order, sortBy) =>
                                         handleSetSortBy(order, sortBy)
@@ -240,9 +200,9 @@ const AdminOrdersTable = ({ heading = true, status = '' }) => {
                                 </td>
                                 <td>
                                     <small className="text-nowrap">
-                                        {order.amountFromUser &&
+                                        {order.amount &&
                                             formatPrice(
-                                                order.amountFromUser
+                                                order.amount
                                                     .$numberDecimal,
                                             )}{' '}
                                         VND
@@ -253,46 +213,6 @@ const AdminOrdersTable = ({ heading = true, status = '' }) => {
                                     style={{ maxWidth: '300px' }}
                                 >
                                     <UserSmallCard user={order.userId} />
-                                </td>
-                                <td
-                                    className="text-start ps-2"
-                                    style={{ maxWidth: '300px' }}
-                                >
-                                    <StoreSmallCard store={order.storeId} />
-                                </td>
-                                <td>
-                                    <small className="text-nowrap">
-                                        For seller:{' '}
-                                        {order.amountToStore &&
-                                            formatPrice(
-                                                order.amountToStore
-                                                    .$numberDecimal,
-                                            )}{' '}
-                                        VND
-                                    </small>
-                                    <br />
-
-                                    <small className="text-nowrap">
-                                        For GoodDeal:{' '}
-                                        {order.amountToGD &&
-                                            formatPrice(
-                                                order.amountToGD.$numberDecimal,
-                                            )}{' '}
-                                        VND
-                                    </small>
-                                </td>
-                                <td>
-                                    {order.deliveryId && (
-                                        <small>
-                                            {order.deliveryId.name}
-                                            <br />
-                                            {formatPrice(
-                                                order.deliveryId.price
-                                                    .$numberDecimal,
-                                            )}{' '}
-                                            VND
-                                        </small>
-                                    )}
                                 </td>
                                 <td>
                                     <small>
@@ -319,7 +239,7 @@ const AdminOrdersTable = ({ heading = true, status = '' }) => {
                                                 <i className="fas fa-info-circle"></i>
                                             </Link>
                                             <small className="cus-tooltip-msg">
-                                                View order detail
+                                                Xem chi tiết
                                             </small>
                                         </div>
                                     </div>

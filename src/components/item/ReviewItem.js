@@ -7,7 +7,6 @@ import ReviewForm from './form/ReviewForm';
 
 const ReviewItem = ({
     orderId = '',
-    storeId = '',
     productId = '',
     detail = true,
 }) => {
@@ -31,7 +30,7 @@ const ReviewItem = ({
 
     useEffect(() => {
         init();
-    }, [orderId, storeId, productId]);
+    }, [orderId, productId]);
 
     return (
         <div className="review-item position-relative d-inline-block">
@@ -50,7 +49,7 @@ const ReviewItem = ({
                             <i className="fas fa-comment-dots"></i>
                             {detail && (
                                 <span className="ms-2 res-hide-lg">
-                                    Review & rate
+                                    Đánh giá và bình luận
                                 </span>
                             )}
                         </button>
@@ -59,11 +58,10 @@ const ReviewItem = ({
                             <Modal
                                 id="review-form"
                                 hasCloseBtn={false}
-                                title="Review & Rate product"
+                                title="Đánh giá và bình luận"
                             >
                                 <ReviewForm
                                     orderId={orderId}
-                                    storeId={storeId}
                                     productId={productId}
                                     onRun={() => setIsReviewed(true)}
                                 />

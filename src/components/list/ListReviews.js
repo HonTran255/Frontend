@@ -8,7 +8,6 @@ import StarRating from '../label/StarRating';
 
 const ListReviews = ({
     productId = '',
-    storeId = '',
     userId = '',
     heading = 'Reviews & Rating',
 }) => {
@@ -22,7 +21,6 @@ const ListReviews = ({
     });
     const [filter, setFilter] = useState({
         productId,
-        storeId,
         userId,
         rating: '',
         sortBy: 'rating',
@@ -62,10 +60,9 @@ const ListReviews = ({
         setFilter({
             ...filter,
             productId,
-            storeId,
             userId,
         });
-    }, [productId, storeId, userId]);
+    }, [productId, userId]);
 
     const handleChangePage = (newPage) => {
         setFilter({
@@ -138,7 +135,7 @@ const ListReviews = ({
                     {renderFilterRating()}
                 </div>
                 <span className="me-2 text-nowrap">
-                    {pagination.size || 0} results
+                    {pagination.size || 0} kết quả
                 </span>
             </div>
 
@@ -148,7 +145,6 @@ const ListReviews = ({
                         <div className="col-12 mb-2" key={index}>
                             <ReviewInfo
                                 review={review}
-                                about={!!storeId}
                                 onRun={() => setRun(!run)}
                             />
                         </div>

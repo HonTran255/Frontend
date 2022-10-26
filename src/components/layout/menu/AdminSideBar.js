@@ -37,7 +37,7 @@ const AdminSideBar = ({ user = {} }) => {
                         }`}
                     >
                         <i className="fas fa-user-friends"></i>
-                        <span className="ms-3 res-hide-xl">Users</span>
+                        <span className="ms-3 res-hide-xl">Khách hàng</span>
                     </Link>
                 </li>
 
@@ -49,7 +49,7 @@ const AdminSideBar = ({ user = {} }) => {
                         }`}
                     >
                         <i className="fas fa-clipboard"></i>
-                        <span className="ms-3 res-hide-xl">Orders</span>
+                        <span className="ms-3 res-hide-xl">Đơn hàng</span>
                     </Link>
                 </li>
 
@@ -61,7 +61,7 @@ const AdminSideBar = ({ user = {} }) => {
                         }`}
                     >
                         <i className="fas fa-boxes"></i>
-                        <span className="ms-3 res-hide-xl">Category</span>
+                        <span className="ms-3 res-hide-xl">Danh mục</span>
                     </Link>
                 </li>
 
@@ -73,7 +73,7 @@ const AdminSideBar = ({ user = {} }) => {
                         }`}
                     >
                         <i className="fas fa-box"></i>
-                        <span className="ms-3 res-hide-xl">Products</span>
+                        <span className="ms-3 res-hide-xl">Sản phẩm</span>
                     </Link>
                 </li>
 
@@ -85,7 +85,7 @@ const AdminSideBar = ({ user = {} }) => {
                         }`}
                     >
                         <i className="fas fa-truck"></i>
-                        <span className="ms-3 res-hide-xl">Delivery</span>
+                        <span className="ms-3 res-hide-xl">Vận chuyển</span>
                     </Link>
                 </li>
             </ul>

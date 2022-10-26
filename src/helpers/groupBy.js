@@ -5,7 +5,7 @@ import {
     formatTime,
 } from './humanReadable';
 
-export const groupByDate = (items, by, role) => {
+export const groupByDate = (items, by) => {
     let formatFunc = formatTime;
     if (by === 'date') formatFunc = formatDate;
     if (by === 'month') formatFunc = formatMonth;
@@ -14,10 +14,7 @@ export const groupByDate = (items, by, role) => {
     return items
         .map((item) => {
             return {
-                amount:
-                    role === 'admin'
-                        ? item.amountToGD.$numberDecimal
-                        : item.amountToStore.$numberDecimal,
+                amount: item.amount.$numberDecimal,
                 createdAt: formatFunc(item.createdAt),
             };
         })

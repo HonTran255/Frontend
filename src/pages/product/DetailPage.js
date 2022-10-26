@@ -14,11 +14,11 @@ import Error from '../../components/ui/Error';
 import StarRating from '../../components/label/StarRating';
 import FollowProductButton from '../../components/button/FollowProductButton';
 import AddToCartForm from '../../components/item/form/AddToCartForm';
-// import Paragraph from '../../components/ui/Paragraph';
-// import CategorySmallCard from '../../components/card/CategorySmallCard';
+import Paragraph from '../../components/ui/Paragraph';
+import CategorySmallCard from '../../components/card/CategorySmallCard';
 import ListBestSellerProducts from '../../components/list/ListBestSellerProduct';
 import SigninButton from '../../components/item/SigninItem';
-// import ListReviews from '../../components/list/ListReviews';
+import ListReviews from '../../components/list/ListReviews';
 
 const DetailPage = () => {
     const [isloading, setIsLoading] = useState(false);
@@ -118,7 +118,11 @@ const DetailPage = () => {
                                     {product.quantity <= 0 && (
                                         <Error msg="The product is sold out!" />
                                     )}
-
+                                    <Paragraph
+                                        value={product.description}
+                                        label="Mô tả"
+                                        multiLine={true}
+                                    />
                                     {!getToken() && (
                                         <SigninButton
                                             className="w-100 btn-lg"
@@ -150,7 +154,7 @@ const DetailPage = () => {
                                 </div>
                             </div>
 
-                            {/* <div className="col-12">
+                            <div className="col-12">
                                 <div className="container-fluid p-0">
                                     <div className="row res-flex-reverse-md">
                                         <div className="col-md-8 p-0">
@@ -169,15 +173,11 @@ const DetailPage = () => {
                                                 />
                                             </div>
 
-                                            <Paragraph
-                                                value={product.description}
-                                                label="Description"
-                                                multiLine={true}
-                                            />
+
                                         </div>
                                     </div>
                                 </div>
-                            </div> */}
+                            </div>
 
                             <div className="col-12">
                                 {product.categoryId && (

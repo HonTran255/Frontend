@@ -1,20 +1,27 @@
 const icons = {
-    'Not processed': <i className="fas fa-clipboard"></i>,
-    Processing: <i className="fas fa-clipboard-check"></i>,
-    Shipped: <i className="fas fa-truck"></i>,
-    Delivered: <i className="fas fa-check-double"></i>,
-    Cancelled: <i className="fas fa-times"></i>,
+    'Chưa xử lý': <i className="fas fa-clipboard"></i>,
+    'Đã xác nhận': <i className="fas fa-clipboard-check"></i>,
+    'Đang giao hàng': <i className="fas fa-truck"></i>,
+    'Đã giao hàng': <i className="fas fa-check-double"></i>,
+    'Đã hủy': <i className="fas fa-times"></i>,
 };
 
 const colors = {
-    'Not processed': 'warning',
-    Processing: 'primary',
-    Shipped: 'info',
-    Delivered: 'success',
-    Cancelled: 'danger',
+    'Chưa xử lý': 'warning',
+    'Đã xác nhận': 'primary',
+    'Đang giao hàng': 'info',
+    'Đã giao hàng': 'success',
+    'Đã hủy': 'danger',
 };
 
 const OrderStatusLabel = ({ status = '', detail = true }) => {
+
+    if(status==0) status ='Chưa xử lý';
+    if(status==1) status ='Đã xác nhận';
+    if(status==2) status ='Đang giao hàng';
+    if(status==3) status ='Đã giao hàng';
+    if(status==4) status ='Đã hủy';
+  
     return (
         <span className="d-inline-block position-relative">
             <span

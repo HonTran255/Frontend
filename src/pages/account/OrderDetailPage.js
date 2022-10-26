@@ -16,8 +16,7 @@ const OrderDetailPage = (props) => {
                         to="/account/purchase"
                         className="text-decoration-none cus-link-hover"
                     >
-                        <i className="fas fa-arrow-circle-left me-2"></i>Back to
-                        Purchase History
+                        <i className="fas fa-arrow-circle-left me-2"></i>Trở về
                     </Link>
                 </div>
             </div>

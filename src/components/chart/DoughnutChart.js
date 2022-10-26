@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { groupByDate } from '../../helper/groupBy';
-import { randomColorsArray } from '../../helper/color';
+import { groupByDate } from '../../helpers/groupBy';
+import { randomColorsArray } from '../../helpers/color';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
@@ -10,7 +10,7 @@ const DoughnutChart = ({
     items = [],
     role = 'admin',
     groupBy = groupByDate,
-    title = 'Sales statistics',
+    title = 'Thống kế doanh số',
     sliceEnd = 6,
 }) => {
     const [data, setData] = useState({

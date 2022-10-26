@@ -22,29 +22,15 @@ const OrderPage = (props) => {
                     </button>
 
                     <small className="cus-tooltip-msg">
-                        All Orders in System
+                        Tất cả đơn hàng
                     </small>
-                </div>
-
-                <div className="position-relative d-inline-block">
-                    <button
-                        type="button"
-                        className={`btn ${
-                            flag ? 'btn-primary' : 'btn-outline-primary'
-                        } btn-lg ripple cus-tooltip`}
-                        onClick={() => toggleFlag(true)}
-                    >
-                        <i className="fas fa-truck"></i>
-                    </button>
-
-                    <small className="cus-tooltip-msg">Delivery Service</small>
                 </div>
             </div>
 
             <AdminOrdersTable
                 heading={true}
                 isEditable={flag}
-                status={flag ? 'Not processed|Processing|Shipped' : ''}
+                status={flag ? '0|1|2' : ''}
             />
         </AdminLayout>
     );

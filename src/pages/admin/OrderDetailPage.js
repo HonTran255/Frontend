@@ -14,8 +14,7 @@ const OrderDetailPage = (props) => {
                     to="/admin/order"
                     className="text-decoration-none cus-link-hover"
                 >
-                    <i className="fas fa-arrow-circle-left"></i> Back to Orders
-                    Manager
+                    <i className="fas fa-arrow-circle-left"></i> Trở về
                 </Link>
             </div>
         </AdminLayout>
