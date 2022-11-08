@@ -457,7 +457,8 @@ const ListStatisticsItems = ({ by = 'admin'}) => {
                 width: "500px",
                 }}
             >
-                <h4 className="text-center text-uppercase">Bao cao doanh thu</h4>
+                <meta charset="utf-8"></meta>
+                <h4 className="text-center text-uppercase">Báo cáo doanh thu</h4>
                 <DoughnutChart
                     by={options.by}
                     items={items[options.flag]}
